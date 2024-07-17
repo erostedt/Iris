@@ -10,11 +10,27 @@ set(DEMOS_PATH ${PROJECT_SOURCE_DIR}/demos)
 set(CORE_PATH ${SRC_DIR}/core)
 set(PRIMITIVES_PATH ${SRC_DIR}/primitives)
 
+if(UNIX AND NOT APPLE)
+  set(LINUX TRUE)
+else()
+  message(FATAL_ERROR "Currently linux only")
+endif()
+
 include_directories(${CORE_PATH})
 include_directories(${PRIMITIVES_PATH})
 
 include_directories(${THIRD_PARTY_DIR})
 include_directories(${THIRD_PARTY_DIR}/imgui/include)
+
+include_directories(${THIRD_PARTY_DIR}/glfw/include)
+include_directories(${THIRD_PARTY_DIR}/glfw/include/GLFW)
+include_directories(${THIRD_PARTY_DIR}/GL)
+include_directories(${THIRD_PARTY_DIR}/glm/include)
+
+if(LINUX)
+  link_directories(${THIRD_PARTY_DIR}/glfw/linux/lib)
+  link_directories(${THIRD_PARTY_DIR}/glew/linux/lib)
+endif()
 
 file(GLOB IMGUI_SOURCES ${THIRD_PARTY_DIR}/imgui/src/*.cpp)
 file(GLOB CORE_SOURCES ${CORE_PATH}/*.cpp)
