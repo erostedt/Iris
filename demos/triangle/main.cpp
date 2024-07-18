@@ -30,7 +30,6 @@ int main()
     while (window->Show())
     {
         const auto frame = window->NewFrame();
-        triangle.Bind();
         renderer.Render(camera, triangle, shader);
     }
     return EXIT_SUCCESS;

@@ -59,7 +59,6 @@ int main()
             ImGui::End();
         }
 
-        cube.Bind();
         cube.GetTransform().SetRotation({xrot, yrot, zrot});
         camera.MoveTo({0, 0, dist});
         renderer.Render(camera, cube, shader);

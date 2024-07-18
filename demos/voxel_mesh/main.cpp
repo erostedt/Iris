@@ -111,7 +111,6 @@ int main()
             ImGui::End();
         }
 
-        voxel_mesh.Bind();
         voxel_mesh.GetTransform().SetRotation({xrot, yrot, zrot});
         camera.MoveTo({0, 0, dist});
         renderer.Render(camera, voxel_mesh, shader);

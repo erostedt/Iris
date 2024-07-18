@@ -85,7 +85,6 @@ int main()
             ImGui::End();
         }
 
-        point_cloud.Bind();
         point_cloud.GetTransform().SetRotation({xrot, yrot, zrot});
         camera.MoveTo({0, 0, dist});
         renderer.Render(camera, point_cloud, shader);
