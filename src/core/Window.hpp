@@ -57,6 +57,11 @@ class Window
         return glfwWindowShouldClose(m_native_window);
     }
 
+    void Close() const
+    {
+        glfwSetWindowShouldClose(m_native_window, GL_TRUE);
+    }
+
     GLFWwindow *GetNativeWindow() const
     {
         return m_native_window;
