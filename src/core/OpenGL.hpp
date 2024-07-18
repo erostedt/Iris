@@ -16,8 +16,8 @@
 
 struct OpenGLVersion
 {
-    size_t major_version = 4;
-    size_t minor_version = 6;
+    size_t major_version;
+    size_t minor_version;
 };
 
 static const OpenGLVersion OPEN_GL_330 = OpenGLVersion{3, 3};
