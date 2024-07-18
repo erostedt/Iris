@@ -1,7 +1,6 @@
 #pragma once
 #include "OpenGL.hpp"
 
-#include <glm/fwd.hpp>
 #include <glm/glm.hpp>
 #include <iostream>
 #include <memory>

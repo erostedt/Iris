@@ -1,19 +1,8 @@
 #pragma once
 #include "OpenGL.hpp"
 
-#include <cstddef>
-#include <glm/ext/matrix_clip_space.hpp>
-#include <glm/fwd.hpp>
 #include <glm/glm.hpp>
-#include <glm/gtc/constants.hpp>
-#include <glm/gtc/matrix_transform.hpp>
-#include <glm/gtc/type_ptr.hpp>
 
-#include <cstdint>
-#include <cstdlib>
-#include <stdio.h>
-
-#include <alloca.h>
 #include <fstream>
 #include <iostream>
 #include <sstream>

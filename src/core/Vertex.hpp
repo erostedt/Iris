@@ -1,10 +1,11 @@
 #pragma once
 #include "OpenGL.hpp"
 
-#include "Color.hpp"
 #include <glm/glm.hpp>
 #include <initializer_list>
 #include <vector>
+
+#include "Color.hpp"
 
 struct VertexElement
 {

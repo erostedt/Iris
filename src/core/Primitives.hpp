@@ -1,6 +1,5 @@
 #pragma once
 #include <array>
-#include <glm/ext/scalar_constants.hpp>
 #include <glm/glm.hpp>
 #include <memory>
 #include <vector>
