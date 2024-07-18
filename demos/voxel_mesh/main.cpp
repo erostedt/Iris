@@ -1,11 +1,6 @@
 #include <algorithm>
 #include <cstddef>
-#include <glm/ext/matrix_clip_space.hpp>
-#include <glm/fwd.hpp>
 #include <glm/glm.hpp>
-#include <glm/gtc/constants.hpp>
-#include <glm/gtc/matrix_transform.hpp>
-#include <glm/gtc/type_ptr.hpp>
 
 #include "imgui.h"
 #include <cassert>
@@ -21,7 +16,7 @@
 #include "Renderer.hpp"
 #include "Rotation.hpp"
 #include "Shader.hpp"
-#include "SimpleWindow.hpp"
+#include "Window.hpp"
 
 const size_t WINDOW_WIDTH = 1280;
 const size_t WINDOW_HEIGHT = 720;

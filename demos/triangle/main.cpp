@@ -3,7 +3,7 @@
 #include "Primitives.hpp"
 #include "Renderer.hpp"
 #include "Shader.hpp"
-#include "SimpleWindow.hpp"
+#include "Window.hpp"
 
 const size_t WINDOW_WIDTH = 1280;
 const size_t WINDOW_HEIGHT = 720;
