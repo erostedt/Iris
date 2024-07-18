@@ -7,11 +7,19 @@
 #define GLFW_INCLUDE_NONE
 #include <GLFW/glfw3.h>
 
-// For includes related to OpenGL, make sure their are included after glfw3.h
-//#include <OpenGL/gl3.h>
 #elif defined(__linux__)
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 #else
 
 #endif
+
+struct OpenGLVersion
+{
+    size_t major_version = 4;
+    size_t minor_version = 6;
+};
+
+static const OpenGLVersion OPEN_GL_330 = OpenGLVersion{3, 3};
+static const OpenGLVersion OPEN_GL_410 = OpenGLVersion{4, 1};
+static const OpenGLVersion OPEN_GL_460 = OpenGLVersion{4, 6};

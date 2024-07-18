@@ -15,16 +15,6 @@ static void GLFWErrorCallback(int error, const char *description)
     fprintf(stderr, "GLFW Error %d: %s\n", error, description);
 }
 
-struct OpenGLVersion
-{
-    size_t major_version = 4;
-    size_t minor_version = 6;
-};
-
-const OpenGLVersion OPEN_GL_330 = OpenGLVersion{3, 3};
-const OpenGLVersion OPEN_GL_410 = OpenGLVersion{4, 1};
-const OpenGLVersion OPEN_GL_460 = OpenGLVersion{4, 6};
-
 class Frame
 {
   public:
