@@ -25,17 +25,17 @@ const OpenGLVersion OPEN_GL_330 = OpenGLVersion{3, 3};
 const OpenGLVersion OPEN_GL_410 = OpenGLVersion{4, 1};
 const OpenGLVersion OPEN_GL_460 = OpenGLVersion{4, 6};
 
-class SimpleFrame
+class Frame
 {
   public:
-    SimpleFrame(GLFWwindow *window) : m_window{window}
+    Frame(GLFWwindow *window) : m_window{window}
     {
         ImGui_ImplOpenGL3_NewFrame();
         ImGui_ImplGlfw_NewFrame();
         ImGui::NewFrame();
     }
 
-    ~SimpleFrame()
+    ~Frame()
     {
         ImGui::Render();
         ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
@@ -49,13 +49,13 @@ class SimpleFrame
     GLFWwindow *m_window;
 };
 
-class SimpleWindow
+class Window
 {
   public:
-    std::unique_ptr<SimpleFrame> NewFrame()
+    std::unique_ptr<Frame> NewFrame()
     {
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-        return std::make_unique<SimpleFrame>(m_native_window);
+        return std::make_unique<Frame>(m_native_window);
     }
 
     bool Show() const
@@ -73,8 +73,8 @@ class SimpleWindow
         return m_native_window;
     }
 
-    static std::unique_ptr<SimpleWindow> Create(const char *name, int width, int height,
-                                                OpenGLVersion gl_version = OPEN_GL_410)
+    static std::unique_ptr<Window> Create(const char *name, int width, int height,
+                                          OpenGLVersion gl_version = OPEN_GL_410)
     {
         glfwSetErrorCallback(GLFWErrorCallback);
         if (!glfwInit())
@@ -83,12 +83,12 @@ class SimpleWindow
         glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, gl_version.major_version);
         glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, gl_version.minor_version);
         glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-        GLFWwindow *window = glfwCreateWindow(width, height, name, nullptr, nullptr);
-        if (window == nullptr)
+        GLFWwindow *glfw_window = glfwCreateWindow(width, height, name, nullptr, nullptr);
+        if (glfw_window == nullptr)
         {
             return {};
         }
-        glfwMakeContextCurrent(window);
+        glfwMakeContextCurrent(glfw_window);
 
         if (glewInit() != GLEW_OK)
         {
@@ -109,15 +109,15 @@ class SimpleWindow
 
         ImGui::StyleColorsDark();
 
-        ImGui_ImplGlfw_InitForOpenGL(window, true);
+        ImGui_ImplGlfw_InitForOpenGL(glfw_window, true);
         ImGui_ImplOpenGL3_Init();
-        auto simple_window = std::make_unique<SimpleWindow>();
-        simple_window->m_native_window = window;
+        auto window = std::make_unique<Window>();
+        window->m_native_window = glfw_window;
 
-        return simple_window;
+        return window;
     }
 
-    ~SimpleWindow()
+    ~Window()
     {
         ImGui_ImplOpenGL3_Shutdown();
         ImGui_ImplGlfw_Shutdown();

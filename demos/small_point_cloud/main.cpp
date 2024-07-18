@@ -45,7 +45,7 @@ std::vector<ColoredSphere> CreateSpheres()
 
 int main()
 {
-    const auto window = SimpleWindow::Create("Triangle", WINDOW_WIDTH, WINDOW_HEIGHT);
+    const auto window = Window::Create("Triangle", WINDOW_WIDTH, WINDOW_HEIGHT);
 
     if (!window)
     {
