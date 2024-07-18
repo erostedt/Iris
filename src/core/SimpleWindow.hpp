@@ -1,7 +1,5 @@
 #pragma once
-
-#include <GL/glew.h>
-#include <GLFW/glfw3.h>
+#include "OpenGL.hpp"
 
 #include <glm/fwd.hpp>
 #include <glm/glm.hpp>
@@ -24,6 +22,7 @@ struct OpenGLVersion
 };
 
 const OpenGLVersion OPEN_GL_330 = OpenGLVersion{3, 3};
+const OpenGLVersion OPEN_GL_410 = OpenGLVersion{4, 1};
 const OpenGLVersion OPEN_GL_460 = OpenGLVersion{4, 6};
 
 class SimpleFrame
@@ -75,7 +74,7 @@ class SimpleWindow
     }
 
     static std::unique_ptr<SimpleWindow> Create(const char *name, int width, int height,
-                                                OpenGLVersion gl_version = OPEN_GL_460)
+                                                OpenGLVersion gl_version = OPEN_GL_410)
     {
         glfwSetErrorCallback(GLFWErrorCallback);
         if (!glfwInit())
