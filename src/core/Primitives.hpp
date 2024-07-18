@@ -1,6 +1,4 @@
 #pragma once
-#include "OpenGL.hpp"
-
 #include <array>
 #include <glm/ext/scalar_constants.hpp>
 #include <glm/glm.hpp>
