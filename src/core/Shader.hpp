@@ -1,6 +1,5 @@
 #pragma once
-#include <GL/glew.h>
-#include <GLFW/glfw3.h>
+#include "OpenGL.hpp"
 
 #include <cstddef>
 #include <glm/ext/matrix_clip_space.hpp>
@@ -19,7 +18,6 @@
 #include <iostream>
 #include <sstream>
 #include <string>
-#include <unordered_map>
 
 #include "Exception.hpp"
 

@@ -1,6 +1,3 @@
-#include <GL/glew.h>
-#include <GLFW/glfw3.h>
-
 #include <algorithm>
 #include <cstddef>
 #include <glm/ext/matrix_clip_space.hpp>
@@ -67,7 +64,7 @@ std::vector<ColoredVoxel> CreateColoredVoxel()
             {
                 float z = zmin + (iz + 0.5f) * dz;
                 float b = (z - zmin) / zwidth;
-                if (uniform(0.0f, 1.0f) < 0.5f)
+                if (Random::Uniform(0.0f, 1.0f) < 0.5f)
                 {
                     voxels.push_back(ColoredVoxel{Voxel{{x, y, z}, {dx, dy, dz}}, {r, g, b, 1.0}});
                 }

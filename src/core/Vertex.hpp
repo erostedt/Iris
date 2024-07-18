@@ -1,8 +1,7 @@
 #pragma once
+#include "OpenGL.hpp"
 
 #include "Color.hpp"
-#include <GL/glew.h>
-#include <GLFW/glfw3.h>
 #include <glm/glm.hpp>
 #include <initializer_list>
 #include <vector>

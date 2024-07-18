@@ -1,7 +1,4 @@
 #pragma once
-#include <GL/glew.h>
-#include <GLFW/glfw3.h>
-
 #include <array>
 #include <glm/ext/scalar_constants.hpp>
 #include <glm/glm.hpp>
