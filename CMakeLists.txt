@@ -13,8 +13,6 @@ set(PRIMITIVES_PATH ${SRC_DIR}/primitives)
 if(UNIX AND NOT APPLE)
   set(LINUX TRUE)
 elseif(NOT APPLE)
-
-else()
   message(FATAL_ERROR "Currently linux/mac only")
 endif()
 
