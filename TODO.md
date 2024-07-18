@@ -7,6 +7,10 @@ Shader:
 - Make into class which verifies that the shader has MVP etc.
 - Make so that shader holds reference to all its uniforms.
 
+Lighting:
+
+- Look into how to do basic lighting.
+
 Mesh:
 
 - Make it possible to load a simple mesh.
