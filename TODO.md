@@ -11,6 +11,14 @@ Lighting:
 
 - Look into how to do basic lighting.
 
+Skybox:
+
+- Look into how to add skybox to a scene
+
+Terrain:
+
+- Look into how to generate a terrain or loading a background
+
 Mesh:
 
 - Make it possible to load a simple mesh.
