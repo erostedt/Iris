@@ -21,6 +21,7 @@ include_directories(${PRIMITIVES_PATH})
 
 include_directories(${THIRD_PARTY_DIR})
 include_directories(${THIRD_PARTY_DIR}/imgui/include)
+include_directories(${THIRD_PARTY_DIR}/stb_image)
 
 if(APPLE)
   set(MAC_GL_PATH ${THIRD_PARTY_DIR}/mac)
