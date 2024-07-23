@@ -14,6 +14,9 @@ static void GLFWErrorCallback(int error, const char *description)
     fprintf(stderr, "GLFW Error %d: %s\n", error, description);
 }
 
+namespace Iris
+{
+
 class Frame
 {
   public:
@@ -45,6 +48,11 @@ class Window
     {
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         return std::make_unique<Frame>(m_native_window);
+    }
+
+    void SetBackgroundColor(const glm::vec4 &color)
+    {
+        glClearColor(color.r, color.g, color.b, color.a);
     }
 
     bool Show() const
@@ -127,3 +135,5 @@ class Window
   private:
     GLFWwindow *m_native_window;
 };
+
+}; // namespace Iris
