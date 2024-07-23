@@ -11,12 +11,12 @@ namespace Iris
 template <typename T> class FixedVertexBuffer : Buffer
 {
   public:
-    FixedVertexBuffer(const std::vector<Vertex> &&vertices, const VertexLayout &layout)
+    FixedVertexBuffer(const std::vector<T> &&vertices, const VertexLayout &layout)
         : m_vertices(vertices), m_layout(layout)
     {
         glGenBuffers(1, &m_id);
         Bind();
-        glBufferData(GL_ARRAY_BUFFER, sizeof(Vertex) * vertices.size(), vertices.data(), GL_STATIC_DRAW);
+        glBufferData(GL_ARRAY_BUFFER, sizeof(T) * vertices.size(), vertices.data(), GL_STATIC_DRAW);
         Unbind();
     }
 
@@ -59,7 +59,7 @@ template <typename T> class FixedVertexBuffer : Buffer
         glBindBuffer(GL_ARRAY_BUFFER, 0);
     }
 
-    const std::vector<Vertex> &GetVertices() const
+    const std::vector<T> &GetVertices() const
     {
         return m_vertices;
     }
@@ -70,7 +70,7 @@ template <typename T> class FixedVertexBuffer : Buffer
     }
 
   private:
-    std::vector<Vertex> m_vertices;
+    std::vector<T> m_vertices;
     VertexLayout m_layout;
     uint32_t m_id{0};
 };
