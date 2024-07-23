@@ -1,6 +1,7 @@
 #pragma once
 
 #include "IndexBuffer.hpp"
+#include "OpenGL.hpp"
 #include "VertexArray.hpp"
 #include "VertexBuffer.hpp"
 
@@ -30,7 +31,7 @@ template <typename T> class Mesh
         m_index_buffer.Unbind();
     }
 
-    const std::vector<T> &GetVertices()
+    const std::vector<T> &GetVertices() const
     {
         return m_vertex_buffer.GetVertices();
     }
@@ -40,7 +41,7 @@ template <typename T> class Mesh
         return m_vertex_buffer.Size();
     }
 
-    const std::vector<uint32_t> &GetIndices()
+    const std::vector<uint32_t> &GetIndices() const
     {
         return m_index_buffer.GetIndices();
     }
