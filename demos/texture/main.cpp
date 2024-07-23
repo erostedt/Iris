@@ -24,7 +24,7 @@ int main()
 
     window->SetBackgroundColor(WHITE);
 
-    Texture gengar = Texture::FromPNG("../gengar.png");
+    Texture gengar = Texture::FromFile("../gengar.png");
 
     auto quad = CreateQuad();
     const std::string shaders_path{"../demos/texture/shaders"};

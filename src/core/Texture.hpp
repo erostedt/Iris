@@ -1,3 +1,4 @@
+#pragma once
 #include "OpenGL.hpp"
 #define STB_IMAGE_IMPLEMENTATION
 #include "stb_image.h"
@@ -23,11 +24,11 @@ const TextureParameters DEFAULT_TEXTURE_PARAMETERS = {GL_LINEAR, GL_LINEAR, GL_C
 class Texture
 {
   public:
-    static Texture FromPNG(const std::filesystem::path &filepath,
-                           TextureParameters parameters = DEFAULT_TEXTURE_PARAMETERS)
+    static Texture FromFile(const std::filesystem::path &filepath,
+                            TextureParameters parameters = DEFAULT_TEXTURE_PARAMETERS)
     {
         assert(std::filesystem::exists(filepath));
-        assert(filepath.extension().string() == ".png");
+        assert(filepath.extension().string() == ".png" || filepath.extension().string() == ".bmp");
         int width, height, channels;
         int bytes_per_pixel = 4;
         stbi_set_flip_vertically_on_load(1);
