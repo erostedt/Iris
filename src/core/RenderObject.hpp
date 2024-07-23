@@ -32,6 +32,7 @@ template <typename T> class RenderObject
         m_mesh->Bind();
         // Mateiral bind
     }
+
     Transform &GetTransform()
     {
         return m_transform;
