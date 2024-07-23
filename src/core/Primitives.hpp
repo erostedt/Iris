@@ -5,6 +5,7 @@
 #include <vector>
 
 #include "Color.hpp"
+#include "Directions.hpp"
 #include "Mesh.hpp"
 #include "RenderObject.hpp"
 #include "Shapes.hpp"
@@ -28,10 +29,10 @@ static inline RenderObject<Vertex> CreateTriangle(const Color &color)
 
 static inline RenderObject<TextureVertex> CreateQuad()
 {
-    std::vector<TextureVertex> vertices = {{{-0.5f, -0.5f, 0.0f}, {0.0f, 0.0f}},
-                                           {{0.5f, -0.5f, 0.0f}, {1.0f, 0.0f}},
-                                           {{0.5f, 0.5f, 0.0f}, {1.0f, 1.0f}},
-                                           {{-0.5f, 0.5f, 0.0f}, {0.0f, 1.0f}}};
+    std::vector<TextureVertex> vertices = {{{-0.5f, -0.5f, 0.0f}, FORWARD, {0.0f, 0.0f}},
+                                           {{0.5f, -0.5f, 0.0f}, FORWARD, {1.0f, 0.0f}},
+                                           {{0.5f, 0.5f, 0.0f}, FORWARD, {1.0f, 1.0f}},
+                                           {{-0.5f, 0.5f, 0.0f}, FORWARD, {0.0f, 1.0f}}};
 
     std::vector<uint32_t> indices = {0, 1, 2, 2, 3, 0};
     auto mesh = std::make_unique<Mesh<TextureVertex>>(std::move(vertices), std::move(indices));
