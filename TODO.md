@@ -26,7 +26,6 @@ Mesh:
 
 Texture:
 
-- Add image loading as a texture.
 - Get texture wrapping on a cube working.
 - Get texture working on a more complex mesh
 
