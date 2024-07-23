@@ -1,4 +1,5 @@
 #pragma once
+#include "Color.hpp"
 #include "OpenGL.hpp"
 
 #include <glm/glm.hpp>
@@ -53,6 +54,12 @@ class Window
     void SetBackgroundColor(const glm::vec4 &color)
     {
         glClearColor(color.r, color.g, color.b, color.a);
+    }
+
+    void SetBlendingFunction(const uint32_t source_factor, const uint32_t destination_factor)
+    {
+        glEnable(GL_BLEND);
+        glBlendFunc(source_factor, destination_factor);
     }
 
     bool Show() const
@@ -115,6 +122,8 @@ class Window
         ImGui_ImplOpenGL3_Init();
         auto window = std::make_unique<Window>();
         window->m_native_window = glfw_window;
+        window->SetBackgroundColor(BLACK);
+        window->SetBlendingFunction(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
         return window;
     }
