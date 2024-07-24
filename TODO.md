@@ -19,11 +19,6 @@ Terrain:
 
 - Look into how to generate a terrain or loading a background
 
-Texture:
-
-- Get texture wrapping on a cube working.
-- Get texture working on a more complex mesh
-
 Material:
 
 - Make Material class with Shaders
