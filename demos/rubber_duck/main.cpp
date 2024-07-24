@@ -3,7 +3,6 @@
 
 #include "Directions.hpp"
 #include "ObjReader.hpp"
-#include "Primitives.hpp"
 #include "Renderer.hpp"
 #include "Shader.hpp"
 #include "Texture.hpp"
@@ -13,10 +12,11 @@ const size_t WINDOW_WIDTH = 1280;
 const size_t WINDOW_HEIGHT = 720;
 
 using namespace Iris;
+namespace fs = std::filesystem;
 
 int main()
 {
-    const auto window = Window::Create("F16", WINDOW_WIDTH, WINDOW_HEIGHT);
+    const auto window = Window::Create("Bob", WINDOW_WIDTH, WINDOW_HEIGHT);
 
     if (!window)
     {
@@ -24,12 +24,13 @@ int main()
         return EXIT_FAILURE;
     }
 
-    Texture texture = Texture::FromFile("../demos/f16/model/F16s.bmp");
-    auto quad = CreateQuad();
-    auto model = read_obj_file("../demos/f16/model/f16.obj");
+    const fs::path demo_path{"../demos/rubber_duck"};
 
-    const std::string shaders_path{"../demos/f16/shaders"};
-    const uint32_t shader = create_shader(shaders_path + "/vertex.vert", shaders_path + "/fragment.frag");
+    Texture texture = Texture::FromFile(demo_path / "bob/bob_diffuse.png");
+    auto model = read_obj_file(demo_path / "bob/bob_tri.obj");
+
+    const fs::path shaders_path = demo_path / "shaders";
+    const uint32_t shader = create_shader(shaders_path / "vertex.vert", shaders_path / "fragment.frag");
 
     texture.Bind();
     const Renderer renderer;
