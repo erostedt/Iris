@@ -58,7 +58,6 @@ static VertexIndices parse_vertex_indices(const std::string &vertex_indices_stri
 
 static std::vector<VertexIndices> parse_face_indices(const std::string &line)
 {
-    // f 35289/36523/35013 35290/36525/35014 35284/36517/35008 35285/36519/35009
     std::string vertex_indices_string;
     std::istringstream stream(line);
     stream >> vertex_indices_string;
@@ -78,15 +77,15 @@ static inline RenderObject<TextureVertex> read_obj_file(const std::filesystem::p
     std::ifstream file(objpath);
 
     const std::string vertex_start("v ");
-    const std::string normal_start("vn ");
     const std::string texture_coordinate_start("vt ");
+    const std::string normal_start("vn ");
     const std::string face_start("f ");
     std::string temp;
 
     std::string line;
     std::vector<glm::vec3> positions;
-    std::vector<glm::vec3> normals;
     std::vector<glm::vec2> texture_coordinates;
+    std::vector<glm::vec3> normals;
 
     std::vector<TextureVertex> vertices;
     std::vector<uint32_t> indices;
@@ -106,6 +105,16 @@ static inline RenderObject<TextureVertex> read_obj_file(const std::filesystem::p
             stream >> position.z;
             positions.push_back(position);
         }
+        else if (line.starts_with(texture_coordinate_start))
+        {
+            std::istringstream stream(line);
+            stream >> temp;
+
+            glm::vec2 texture_coordinate;
+            stream >> texture_coordinate.x;
+            stream >> texture_coordinate.y;
+            texture_coordinates.push_back(texture_coordinate);
+        }
         else if (line.starts_with(normal_start))
         {
             std::istringstream stream(line);
@@ -117,19 +126,10 @@ static inline RenderObject<TextureVertex> read_obj_file(const std::filesystem::p
             stream >> normal.z;
             normals.push_back(normal);
         }
-        else if (line.starts_with(texture_coordinate_start))
-        {
-            std::istringstream stream(line);
-            stream >> temp;
-
-            glm::vec2 texture_coordinate;
-            stream >> texture_coordinate.x;
-            stream >> texture_coordinate.y;
-            texture_coordinates.push_back(texture_coordinate);
-        }
         else if (line.starts_with(face_start))
         {
             const auto face_indices = parse_face_indices(line);
+
             for (const auto &vertex_indices : face_indices)
             {
                 const auto multi_index = VertexIndicesToTuple(vertex_indices);
@@ -141,8 +141,8 @@ static inline RenderObject<TextureVertex> read_obj_file(const std::filesystem::p
                 {
                     TextureVertex vertex;
                     vertex.position = positions.at(std::get<0>(multi_index));
-                    vertex.normal = normals.at(std::get<1>(multi_index));
-                    vertex.texture_coordinates = texture_coordinates.at(std::get<2>(multi_index));
+                    vertex.texture_coordinates = texture_coordinates.at(std::get<1>(multi_index));
+                    vertex.normal = normals.at(std::get<2>(multi_index));
 
                     seen_vertices[multi_index] = current_index;
                     indices.push_back(current_index);
