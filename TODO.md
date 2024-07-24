@@ -19,11 +19,6 @@ Terrain:
 
 - Look into how to generate a terrain or loading a background
 
-Mesh:
-
-- Make it possible to load a simple mesh.
-- Normals etc must probably be supported for this.
-
 Texture:
 
 - Get texture wrapping on a cube working.
