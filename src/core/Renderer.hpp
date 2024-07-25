@@ -22,21 +22,22 @@ class Renderer
         render_object.Bind();
         const Mesh<T> &mesh = render_object.GetMesh();
 
-        const int model_loc = glGetUniformLocation(shader, "u_model");
+        GL_CHECK(glUseProgram(shader));
+
+        GL_CHECK(const int model_loc = glGetUniformLocation(shader, "u_model"));
         assert(model_loc != -1);
 
-        const int view_loc = glGetUniformLocation(shader, "u_view");
+        GL_CHECK(const int view_loc = glGetUniformLocation(shader, "u_view"));
         assert(view_loc != -1);
 
-        const int proj_loc = glGetUniformLocation(shader, "u_projection");
+        GL_CHECK(const int proj_loc = glGetUniformLocation(shader, "u_projection"));
         assert(proj_loc != -1);
 
-        glUniformMatrix4fv(model_loc, 1, GL_FALSE, glm::value_ptr(model_matrix));
-        glUniformMatrix4fv(view_loc, 1, GL_FALSE, glm::value_ptr(view_matrix));
-        glUniformMatrix4fv(proj_loc, 1, GL_FALSE, glm::value_ptr(projection_matrix));
+        GL_CHECK(glUniformMatrix4fv(model_loc, 1, GL_FALSE, glm::value_ptr(model_matrix)));
+        GL_CHECK(glUniformMatrix4fv(view_loc, 1, GL_FALSE, glm::value_ptr(view_matrix)));
+        GL_CHECK(glUniformMatrix4fv(proj_loc, 1, GL_FALSE, glm::value_ptr(projection_matrix)));
 
-        glUseProgram(shader);
-        glDrawElements(GL_TRIANGLES, mesh.NumIndices(), GL_UNSIGNED_INT, nullptr);
+        GL_CHECK(glDrawElements(GL_TRIANGLES, mesh.NumIndices(), GL_UNSIGNED_INT, nullptr));
     }
 };
 

@@ -19,17 +19,6 @@ Terrain:
 
 - Look into how to generate a terrain or loading a background
 
-Mesh:
-
-- Make it possible to load a simple mesh.
-- Normals etc must probably be supported for this.
-
-Texture:
-
-- Add image loading as a texture.
-- Get texture wrapping on a cube working.
-- Get texture working on a more complex mesh
-
 Material:
 
 - Make Material class with Shaders

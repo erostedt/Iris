@@ -17,7 +17,6 @@ elseif(NOT APPLE)
 endif()
 
 include_directories(${CORE_PATH})
-include_directories(${PRIMITIVES_PATH})
 
 include_directories(${THIRD_PARTY_DIR})
 include_directories(${THIRD_PARTY_DIR}/imgui/include)
@@ -38,10 +37,12 @@ endif()
 
 file(GLOB IMGUI_SOURCES ${THIRD_PARTY_DIR}/imgui/src/*.cpp)
 file(GLOB CORE_SOURCES ${CORE_PATH}/*.cpp)
-file(GLOB PRIMITIVES_SOURCES ${PRIMITIVES_PATH}/*.cpp)
 file(GLOB DEMOS ${DEMOS_PATH}/*)
 
 foreach(DEMO ${DEMOS})
+    if (NOT IS_DIRECTORY ${DEMO})
+        continue()
+    endif()
   get_filename_component(DEMO_NAME ${DEMO} NAME_WE)
   message("Building: " ${DEMO_NAME})
   file(GLOB DEMO_SOURCES ${DEMO}/*.cpp)

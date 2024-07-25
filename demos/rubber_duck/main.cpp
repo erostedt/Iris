@@ -1,7 +1,8 @@
+#include <cstdlib>
 #include <iostream>
 
 #include "Directions.hpp"
-#include "Primitives.hpp"
+#include "ObjReader.hpp"
 #include "Renderer.hpp"
 #include "Shader.hpp"
 #include "Texture.hpp"
@@ -11,10 +12,11 @@ const size_t WINDOW_WIDTH = 1280;
 const size_t WINDOW_HEIGHT = 720;
 
 using namespace Iris;
+namespace fs = std::filesystem;
 
 int main()
 {
-    const auto window = Window::Create("Gengar", WINDOW_WIDTH, WINDOW_HEIGHT);
+    const auto window = Window::Create("Bob", WINDOW_WIDTH, WINDOW_HEIGHT);
 
     if (!window)
     {
@@ -22,23 +24,24 @@ int main()
         return EXIT_FAILURE;
     }
 
-    window->SetBackgroundColor(WHITE);
+    const fs::path demo_path{"../demos/rubber_duck"};
 
-    Texture gengar = Texture::FromFile("../gengar.png");
+    Texture texture = Texture::FromFile(demo_path / "bob/bob_diffuse.png");
+    auto model = read_obj_file(demo_path / "bob/bob_tri.obj");
 
-    auto quad = CreateQuad();
-    const std::string shaders_path{"../demos/texture/shaders"};
-    const uint32_t shader = create_shader(shaders_path + "/vertex.vert", shaders_path + "/fragment.frag");
+    const fs::path shaders_path = demo_path / "shaders";
+    const uint32_t shader = create_shader(shaders_path / "vertex.vert", shaders_path / "fragment.frag");
 
+    texture.Bind();
     const Renderer renderer;
-    gengar.Bind();
     ProjectionCamera camera(45.0f, WINDOW_WIDTH, WINDOW_HEIGHT, 0.1f, 100.0f);
     camera.MoveTo({0.0f, 0.0f, 5.0f});
+
     while (window->Show())
     {
         const auto frame = window->NewFrame();
-        renderer.Render(camera, quad, shader);
-        quad.GetTransform().RotateDegrees(1, UP);
+        renderer.Render(camera, model, shader);
+        model.GetTransform().RotateDegrees(1, UP);
     }
     return EXIT_SUCCESS;
 }
