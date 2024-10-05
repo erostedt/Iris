@@ -1,12 +1,9 @@
 #include <algorithm>
 #include <execution>
-#include <cstdint>
-#include <cstdlib>
-#include <glm/fwd.hpp>
-#include <iostream>
-#include <fstream>
 #include <filesystem>
+#include <fstream>
 #include <iostream>
+#include <numeric>
 #include <ranges>
 #include <string>
 #include <vector>
@@ -29,7 +26,7 @@ namespace fs = std::filesystem;
 
 using namespace Iris;
 
-glm::mat4x4  LoadProjectionMatrix(const fs::path &path)
+glm::mat4x4 LoadProjectionMatrix(const fs::path &path)
 {
     std::ifstream file(path);
 
@@ -50,8 +47,7 @@ glm::mat4x4  LoadProjectionMatrix(const fs::path &path)
     return projection_matrix;
 }
 
-
-std::vector<glm::mat4x4> LoadProjectionMatrices(const fs::path& directory)
+std::vector<glm::mat4x4> LoadProjectionMatrices(const fs::path &directory)
 {
     std::vector<glm::mat4x4> projection_matrices;
     for (size_t i = 0;; ++i)
@@ -66,7 +62,7 @@ std::vector<glm::mat4x4> LoadProjectionMatrices(const fs::path& directory)
     return projection_matrices;
 }
 
-std::vector<cv::Mat> LoadImages(const fs::path& directory)
+std::vector<cv::Mat> LoadImages(const fs::path &directory)
 {
 
     std::vector<cv::Mat> images;
@@ -139,7 +135,8 @@ inline bool Inside(const cv::Mat &image, int x, int y)
     return (x >= 0) && (x < image.cols) && (y >= 0) && (y < image.rows);
 }
 
-std::vector<size_t> VoxelsHitCount(const std::vector<Voxel> &voxels, const std::vector<cv::Mat> &silhouettes, const std::vector<glm::mat4x4> &pmats)
+std::vector<size_t> VoxelsHitCount(const std::vector<Voxel> &voxels, const std::vector<cv::Mat> &silhouettes,
+                                   const std::vector<glm::mat4x4> &pmats)
 {
     std::vector<size_t> hits(voxels.size());
     std::fill_n(std::execution::par_unseq, hits.begin(), hits.size(), 0);
@@ -165,13 +162,14 @@ std::vector<size_t> VoxelsHitCount(const std::vector<Voxel> &voxels, const std::
     return hits;
 }
 
-std::vector<Voxel> VisualHull(std::vector<Voxel> voxels, const std::vector<cv::Mat> &silhouettes, const std::vector<glm::mat4x4> &pmats, size_t min_hits)
+std::vector<Voxel> VisualHull(std::vector<Voxel> voxels, const std::vector<cv::Mat> &silhouettes,
+                              const std::vector<glm::mat4x4> &pmats, size_t min_hits)
 {
     using namespace std::ranges::views;
     const auto hits = VoxelsHitCount(voxels, silhouettes, pmats);
     std::vector<Voxel> visual_hull;
     voxels.reserve(voxels.size());
-    for (const auto& [voxel, hit_count] : zip(voxels, hits))
+    for (const auto &[voxel, hit_count] : zip(voxels, hits))
     {
         if (hit_count >= min_hits)
         {
@@ -211,7 +209,7 @@ std::vector<float> Bounds(const std::vector<Voxel> &voxels)
     return {xmin, xmax, ymin, ymax, zmin, zmax};
 }
 
-void Centrize(std::vector<Voxel> &voxels, const std::vector<float>& bounds)
+void Centrize(std::vector<Voxel> &voxels, const std::vector<float> &bounds)
 {
     float xmid = 0.5f * (bounds.at(0) + bounds.at(1));
     float ymid = 0.5f * (bounds.at(2) + bounds.at(3));
@@ -224,7 +222,7 @@ void Centrize(std::vector<Voxel> &voxels, const std::vector<float>& bounds)
     }
 }
 
-std::vector<ColoredVoxel> ColorizeVoxels(const std::vector<Voxel>& voxels, const std::vector<float>& bounds)
+std::vector<ColoredVoxel> ColorizeVoxels(const std::vector<Voxel> &voxels, const std::vector<float> &bounds)
 {
     std::vector<ColoredVoxel> cvoxels;
     for (const Voxel &voxel : voxels)
@@ -237,7 +235,6 @@ std::vector<ColoredVoxel> ColorizeVoxels(const std::vector<Voxel>& voxels, const
     }
     return cvoxels;
 }
-
 
 int main()
 {
@@ -284,7 +281,6 @@ int main()
     Centrize(voxels, bounds);
 
     auto voxel_mesh = CreateVoxelMesh(ColorizeVoxels(visual_hull, bounds));
-
 
     if (!window)
     {
