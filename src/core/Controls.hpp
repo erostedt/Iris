@@ -1,3 +1,5 @@
+#pragma once
+
 #include "imgui.h"
 #include <functional>
 #include <unordered_map>
@@ -24,4 +26,4 @@ class Controls
     std::unordered_map<ImGuiKey, std::vector<CallbackFunction>> m_on_pressed;
     std::unordered_map<ImGuiKey, std::vector<CallbackFunction>> m_on_released;
 };
-};
+}; // namespace Iris

@@ -1,4 +1,5 @@
 #pragma once
+
 #include "Color.hpp"
 #include "OpenGL.hpp"
 
