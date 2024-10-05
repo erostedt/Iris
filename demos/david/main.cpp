@@ -2,10 +2,12 @@
 #include <execution>
 #include <cstdint>
 #include <cstdlib>
+#include <glm/fwd.hpp>
 #include <iostream>
 #include <fstream>
 #include <filesystem>
 #include <iostream>
+#include <ranges>
 #include <string>
 #include <vector>
 
@@ -27,7 +29,7 @@ namespace fs = std::filesystem;
 
 using namespace Iris;
 
-cv::Mat LoadProjectionMatrix(const fs::path &path)
+glm::mat4x4  LoadProjectionMatrix(const fs::path &path)
 {
     std::ifstream file(path);
 
@@ -36,27 +38,22 @@ cv::Mat LoadProjectionMatrix(const fs::path &path)
     const size_t rows = 3;
     const size_t cols = 4;
 
-    cv::Mat projection_matrix(rows, cols, CV_32F);
-    const size_t n_elements = projection_matrix.total();
+    glm::mat4x4 projection_matrix(1.0f);
 
-    size_t idx = 0;
-    while (std::getline(file, line))
+    for (size_t row = 0; row < rows; ++row)
     {
-        std::istringstream iss(line);
-        float elem;
-        while ((iss >> elem) && (idx < n_elements))
+        for (size_t col = 0; col < cols; ++col)
         {
-            projection_matrix.at<float>(idx) = elem;
-            ++idx;
+            file >> projection_matrix[col][row];
         }
     }
     return projection_matrix;
 }
 
 
-std::vector<cv::Mat> LoadProjectionMatrices(const fs::path& directory)
+std::vector<glm::mat4x4> LoadProjectionMatrices(const fs::path& directory)
 {
-    std::vector<cv::Mat> projection_matrices;
+    std::vector<glm::mat4x4> projection_matrices;
     for (size_t i = 0;; ++i)
     {
         fs::path projection_matrix_path = directory / ("david_" + std::to_string(i) + ".pa");
@@ -106,43 +103,31 @@ cv::Mat ExtractSilhouette(const cv::Mat &bgr_image, uint8_t threshold, cv::Rect 
     return result;
 }
 
-struct DVoxel
-{
-    cv::Mat h_coords;
-    size_t hits;
-};
-
 struct Range
 {
     float start, end;
     size_t steps;
 };
 
-std::vector<DVoxel> MakeVoxels(Range x, Range y, Range z)
+std::vector<Voxel> MakeVoxels(Range x, Range y, Range z)
 {
-    std::vector<DVoxel> voxels{};
+    std::vector<Voxel> voxels;
     voxels.reserve(x.steps * y.steps * z.steps);
 
     float dx = (x.end - x.start) / x.steps;
     float dy = (y.end - y.start) / y.steps;
     float dz = (z.end - z.start) / z.steps;
 
-    for (size_t ix{0}; ix < x.steps; ix++)
+    for (size_t ix = 0; ix < x.steps; ++ix)
     {
         float xp = x.start + ix * dx;
-        for (size_t iy{0}; iy < y.steps; iy++)
+        for (size_t iy = 0; iy < y.steps; ++iy)
         {
             float yp = y.start + iy * dy;
-            for (size_t iz{0}; iz < z.steps; iz++)
+            for (size_t iz = 0; iz < z.steps; ++iz)
             {
                 float zp = z.start + iz * dz;
-                cv::Mat h_coord = cv::Mat::zeros(4, 1, CV_32F);
-                h_coord.at<float>(0) = xp;
-                h_coord.at<float>(1) = yp;
-                h_coord.at<float>(2) = zp;
-                h_coord.at<float>(3) = 1.0;
-
-                voxels.push_back(DVoxel{h_coord, 0});
+                voxels.push_back({glm::vec3{xp, yp, zp}, glm::vec3{dx, dy, dz}});
             }
         }
     }
@@ -154,29 +139,51 @@ inline bool Inside(const cv::Mat &image, int x, int y)
     return (x >= 0) && (x < image.cols) && (y >= 0) && (y < image.rows);
 }
 
-void VisualHull(std::vector<DVoxel> &voxels, const std::vector<cv::Mat> &silhouettes, const std::vector<cv::Mat> &pmats)
+std::vector<size_t> VoxelsHitCount(const std::vector<Voxel> &voxels, const std::vector<cv::Mat> &silhouettes, const std::vector<glm::mat4x4> &pmats)
 {
-    size_t n_samples = silhouettes.size();
-    std::for_each(std::execution::par, voxels.begin(), voxels.end(), [&](DVoxel &voxel) {
-        for (size_t i{0}; i < n_samples; i++)
+    std::vector<size_t> hits(voxels.size());
+    std::fill_n(std::execution::par_unseq, hits.begin(), hits.size(), 0);
+
+    std::vector<size_t> indices(hits.size());
+    std::iota(indices.begin(), indices.end(), 0);
+    std::for_each(std::execution::par, indices.begin(), indices.end(), [&](size_t index) {
+        size_t &voxel_hits = hits[index];
+        for (size_t i = 0; i < silhouettes.size(); ++i)
         {
             auto &silhouette = silhouettes.at(i);
             auto &pmat = pmats.at(i);
-            cv::Mat image_coordinates = pmat * voxel.h_coords;
-            int u = image_coordinates.at<float>(0) / image_coordinates.at<float>(2);
-            int v = image_coordinates.at<float>(1) / image_coordinates.at<float>(2);
+            glm::vec4 image_coordinates = pmat * glm::vec4(voxels[index].center, 1.0f);
+            int u = image_coordinates[0] / image_coordinates[2];
+            int v = image_coordinates[1] / image_coordinates[2];
 
             if (Inside(silhouette, u, v) && (silhouette.at<uint8_t>(v, u) == 255))
             {
-                voxel.hits++;
+                ++voxel_hits;
             }
         }
     });
+    return hits;
 }
 
-std::vector<float> Bounds(const std::vector<DVoxel> &voxels)
+std::vector<Voxel> VisualHull(std::vector<Voxel> voxels, const std::vector<cv::Mat> &silhouettes, const std::vector<glm::mat4x4> &pmats, size_t min_hits)
 {
+    using namespace std::ranges::views;
+    const auto hits = VoxelsHitCount(voxels, silhouettes, pmats);
+    std::vector<Voxel> visual_hull;
+    voxels.reserve(voxels.size());
+    for (const auto& [voxel, hit_count] : zip(voxels, hits))
+    {
+        if (hit_count >= min_hits)
+        {
+            visual_hull.push_back(voxel);
+        }
+    }
+    visual_hull.shrink_to_fit();
+    return visual_hull;
+}
 
+std::vector<float> Bounds(const std::vector<Voxel> &voxels)
+{
     float xmin = std::numeric_limits<float>::max();
     float xmax = std::numeric_limits<float>::min();
 
@@ -186,11 +193,11 @@ std::vector<float> Bounds(const std::vector<DVoxel> &voxels)
     float zmin = std::numeric_limits<float>::max();
     float zmax = std::numeric_limits<float>::min();
 
-    for (const DVoxel &voxel : voxels)
+    for (const Voxel &voxel : voxels)
     {
-        float x = voxel.h_coords.at<float>(0);
-        float y = voxel.h_coords.at<float>(1);
-        float z = voxel.h_coords.at<float>(2);
+        float x = voxel.center[0];
+        float y = voxel.center[1];
+        float z = voxel.center[2];
         xmin = std::min(xmin, x);
         xmax = std::max(xmax, x);
 
@@ -204,17 +211,31 @@ std::vector<float> Bounds(const std::vector<DVoxel> &voxels)
     return {xmin, xmax, ymin, ymax, zmin, zmax};
 }
 
-void centrize(std::vector<DVoxel> &voxels, const std::vector<float> &bounds)
+void Centrize(std::vector<Voxel> &voxels, const std::vector<float>& bounds)
 {
     float xmid = 0.5f * (bounds.at(0) + bounds.at(1));
     float ymid = 0.5f * (bounds.at(2) + bounds.at(3));
     float zmid = 0.5f * (bounds.at(4) + bounds.at(5));
-    for (DVoxel &voxel : voxels)
+    for (Voxel &voxel : voxels)
     {
-        voxel.h_coords.at<float>(0) -= xmid;
-        voxel.h_coords.at<float>(1) -= ymid;
-        voxel.h_coords.at<float>(2) -= zmid;
+        voxel.center[0] -= xmid;
+        voxel.center[1] -= ymid;
+        voxel.center[2] -= zmid;
     }
+}
+
+std::vector<ColoredVoxel> ColorizeVoxels(const std::vector<Voxel>& voxels, const std::vector<float>& bounds)
+{
+    std::vector<ColoredVoxel> cvoxels;
+    for (const Voxel &voxel : voxels)
+    {
+        float r = (voxel.center.x - bounds[0]) / (bounds[1] - bounds[0]);
+        float g = (voxel.center.y - bounds[2]) / (bounds[3] - bounds[2]);
+        float b = (voxel.center.z - bounds[4]) / (bounds[5] - bounds[4]);
+
+        cvoxels.push_back({voxel, {r, g, b, 1.0}});
+    }
+    return cvoxels;
 }
 
 
@@ -234,15 +255,11 @@ int main()
     const float zend = 0.5;
     const size_t zsteps = 150;
 
-    const float dx = (xend - xstart) / xsteps;
-    const float dy = (yend - ystart) / ysteps;
-    const float dz = (zend - zstart) / zsteps;
-
     Range xrange{xstart, xend, xsteps};
     Range yrange{ystart, yend, ysteps};
     Range zrange{zstart, zend, zsteps};
 
-    std::vector<DVoxel> voxels = MakeVoxels(xrange, yrange, zrange);
+    std::vector<Voxel> voxels = MakeVoxels(xrange, yrange, zrange);
     const auto images = LoadImages("../demos/david/data");
     const auto projection_matrices = LoadProjectionMatrices("../demos/david/data");
 
@@ -260,28 +277,13 @@ int main()
     }
     cv::destroyAllWindows();
 
-    VisualHull(voxels, silhouettes, projection_matrices);
-    std::vector<float> bnds = Bounds(voxels);
-    centrize(voxels, bnds);
-
     size_t threshold = 15;
-    std::vector<ColoredVoxel> cvoxels;
-    for (const DVoxel &voxel : voxels)
-    {
-        if (voxel.hits >= threshold)
-        {
-            float x = voxel.h_coords.at<float>(0);
-            float y = voxel.h_coords.at<float>(1);
-            float z = voxel.h_coords.at<float>(2);
+    auto visual_hull = VisualHull(voxels, silhouettes, projection_matrices, threshold);
 
-            float r = (x - xstart) / (xend - xstart);
-            float g = (y - ystart) / (yend - ystart);
-            float b = (z - zstart) / (zend - zstart);
+    std::vector<float> bounds = Bounds(voxels);
+    Centrize(voxels, bounds);
 
-            cvoxels.push_back({{{x, y, z}, {dx, dy, dz}}, {r, g, b, 1.0}});
-        }
-    }
-    auto voxel_mesh = CreateVoxelMesh(cvoxels);
+    auto voxel_mesh = CreateVoxelMesh(ColorizeVoxels(visual_hull, bounds));
 
 
     if (!window)
