@@ -4,6 +4,7 @@
 
 #include "imgui.h"
 #include <cassert>
+#include <filesystem>
 #include <cstdint>
 #include <cstdlib>
 #include <stdio.h>
@@ -22,6 +23,7 @@ const size_t WINDOW_WIDTH = 1280;
 const size_t WINDOW_HEIGHT = 720;
 
 using namespace Iris;
+namespace fs = std::filesystem;
 
 std::vector<ColoredVoxel> CreateColoredVoxel()
 {
@@ -82,8 +84,8 @@ int main()
     const auto voxels = CreateColoredVoxel();
     auto voxel_mesh = CreateVoxelMesh(voxels);
 
-    const std::string shaders_path{"../demos/voxel_mesh/shaders"};
-    const uint32_t shader = create_shader(shaders_path + "/vertex.vert", shaders_path + "/fragment.frag");
+    const fs::path shaders_path = "../examples/voxel_mesh/shaders";
+    const uint32_t shader = create_shader(shaders_path / "vertex.vert", shaders_path / "fragment.frag");
 
     float xrot = 0.0f;
     float yrot = 0.0f;

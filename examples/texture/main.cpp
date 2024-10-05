@@ -1,4 +1,5 @@
 #include <iostream>
+#include <filesystem>
 
 #include "Directions.hpp"
 #include "Primitives.hpp"
@@ -11,6 +12,7 @@ const size_t WINDOW_WIDTH = 1280;
 const size_t WINDOW_HEIGHT = 720;
 
 using namespace Iris;
+namespace fs = std::filesystem;
 
 int main()
 {
@@ -27,8 +29,8 @@ int main()
     Texture gengar = Texture::FromFile("../gengar.png");
 
     auto quad = CreateQuad();
-    const std::string shaders_path{"../demos/texture/shaders"};
-    const uint32_t shader = create_shader(shaders_path + "/vertex.vert", shaders_path + "/fragment.frag");
+    const fs::path shaders_path{"../examples/texture/shaders"};
+    const uint32_t shader = create_shader(shaders_path / "vertex.vert", shaders_path / "fragment.frag");
 
     const Renderer renderer;
     gengar.Bind();

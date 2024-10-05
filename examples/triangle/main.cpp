@@ -1,4 +1,5 @@
 #include <cstdlib>
+#include <filesystem>
 
 #include "Primitives.hpp"
 #include "Renderer.hpp"
@@ -9,6 +10,7 @@ const size_t WINDOW_WIDTH = 1280;
 const size_t WINDOW_HEIGHT = 720;
 
 using namespace Iris;
+namespace fs = std::filesystem;
 
 int main()
 {
@@ -21,8 +23,8 @@ int main()
     }
 
     auto triangle = CreateTriangle(RED);
-    const std::string shaders_path{"../demos/triangle/shaders"};
-    const uint32_t shader = create_shader(shaders_path + "/vertex.vert", shaders_path + "/fragment.frag");
+    const fs::path shaders_path = "../examples/triangle/shaders";
+    const uint32_t shader = create_shader(shaders_path / "vertex.vert", shaders_path / "fragment.frag");
 
     const Renderer renderer;
     ProjectionCamera camera(45.0f, WINDOW_WIDTH, WINDOW_HEIGHT, 0.1f, 100.0f);

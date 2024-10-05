@@ -1,5 +1,6 @@
 #include <algorithm>
 #include <glm/ext/matrix_clip_space.hpp>
+#include <filesystem>
 #include <glm/fwd.hpp>
 #include <glm/glm.hpp>
 #include <glm/gtc/constants.hpp>
@@ -26,6 +27,7 @@ const size_t WINDOW_WIDTH = 1280;
 const size_t WINDOW_HEIGHT = 720;
 
 using namespace Iris;
+namespace fs = std::filesystem;
 
 std::vector<ColoredSphere> CreateSpheres()
 {
@@ -56,8 +58,8 @@ int main()
     const auto spheres = CreateSpheres();
     auto point_cloud = CreatePointCloud(spheres);
 
-    const std::string shaders_path{"../demos/small_point_cloud/shaders"};
-    const uint32_t shader = create_shader(shaders_path + "/vertex.vert", shaders_path + "/fragment.frag");
+    const fs::path shaders_path = "../examples/small_point_cloud/shaders";
+    const uint32_t shader = create_shader(shaders_path / "vertex.vert", shaders_path / "fragment.frag");
 
     float xrot = 0.0f;
     float yrot = 0.0f;

@@ -1,7 +1,7 @@
 #include <algorithm>
 #include <cstdint>
 #include <cstdlib>
-
+#include <filesystem>
 #include <iostream>
 
 #include "Camera.hpp"
@@ -16,6 +16,7 @@
 const size_t WINDOW_WIDTH = 1280;
 const size_t WINDOW_HEIGHT = 720;
 
+namespace fs = std::filesystem;
 using namespace Iris;
 
 int main()
@@ -30,8 +31,8 @@ int main()
 
     auto cube = CreateCube(RED);
 
-    const std::string shaders_path{"../demos/cube/shaders"};
-    const uint32_t shader = create_shader(shaders_path + "/vertex.vert", shaders_path + "/fragment.frag");
+    const fs::path shaders_path = "../examples/cube/shaders";
+    const uint32_t shader = create_shader(shaders_path / "vertex.vert", shaders_path / "fragment.frag");
 
     float xrot = 0.0f;
     float yrot = 0.0f;

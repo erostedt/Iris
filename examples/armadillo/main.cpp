@@ -1,7 +1,6 @@
 #include <algorithm>
 #include <filesystem>
 #include <iostream>
-#include <string>
 #include <vector>
 
 #include <opencv2/imgproc.hpp>
@@ -57,7 +56,7 @@ int main()
         return EXIT_FAILURE;
     }
 
-    const fs::path armadillo_path = "../demos/armadillo/data/armadillo.ply";
+    const fs::path armadillo_path = "../examples/armadillo/data/armadillo.ply";
     auto points = point_cloud_3d_from_ply(armadillo_path);
     if (!points)
     {
@@ -65,8 +64,8 @@ int main()
         return EXIT_FAILURE;
     }
 
-    std::string shaders_path = "../demos/armadillo/shaders";
-    uint32_t shader = create_shader(shaders_path + "/vertex.vert", shaders_path + "/fragment.frag");
+    const fs::path shaders_path = "../examples/armadillo/shaders";
+    uint32_t shader = create_shader(shaders_path / "vertex.vert", shaders_path / "fragment.frag");
 
     BoundingBox bounds = bounding_box(*points).padded(1.0001f, 1.0001f, 1.0001f);
 

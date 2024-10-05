@@ -1,4 +1,5 @@
 #include <cstdlib>
+#include <filesystem>
 #include <iostream>
 
 #include "Directions.hpp"
@@ -24,12 +25,12 @@ int main()
         return EXIT_FAILURE;
     }
 
-    const fs::path demo_path{"../demos/rubber_duck"};
+    const fs::path example_path  = "../examples/rubber_duck";
 
-    Texture texture = Texture::FromFile(demo_path / "bob/bob_diffuse.png");
-    auto model = read_obj_file(demo_path / "bob/bob_tri.obj");
+    Texture texture = Texture::FromFile(example_path / "bob/bob_diffuse.png");
+    auto model = read_obj_file(example_path / "bob/bob_tri.obj");
 
-    const fs::path shaders_path = demo_path / "shaders";
+    const fs::path shaders_path = example_path / "shaders";
     const uint32_t shader = create_shader(shaders_path / "vertex.vert", shaders_path / "fragment.frag");
 
     texture.Bind();

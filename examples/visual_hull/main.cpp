@@ -22,9 +22,8 @@
 
 const size_t WINDOW_WIDTH = 1280;
 const size_t WINDOW_HEIGHT = 720;
-namespace fs = std::filesystem;
-
 using namespace Iris;
+namespace fs = std::filesystem;
 
 glm::mat4x4 LoadProjectionMatrix(const fs::path &path)
 {
@@ -257,8 +256,8 @@ int main()
     Range zrange{zstart, zend, zsteps};
 
     std::vector<Voxel> voxels = MakeVoxels(xrange, yrange, zrange);
-    const auto images = LoadImages("../demos/david/data");
-    const auto projection_matrices = LoadProjectionMatrices("../demos/david/data");
+    const auto images = LoadImages("../examples/visual_hull/data");
+    const auto projection_matrices = LoadProjectionMatrices("../examples/visual_hull/data");
 
     std::vector<cv::Mat> silhouettes{};
     silhouettes.reserve(images.size());
@@ -288,8 +287,8 @@ int main()
         return EXIT_FAILURE;
     }
 
-    const std::string shaders_path{"../demos/david/shaders"};
-    const uint32_t shader = create_shader(shaders_path + "/vertex.vert", shaders_path + "/fragment.frag");
+    const fs::path shaders_path = "../examples/visual_hull/shaders";
+    const uint32_t shader = create_shader(shaders_path / "vertex.vert", shaders_path / "fragment.frag");
 
     float xrot = 0.0f;
     float yrot = 0.0f;

@@ -28,10 +28,6 @@ Controls:
 
 - Add controls so that camera and object can be moved, and closing of window.
 
-Demos:
-
-- Add more demos
-
 Namespaces:
 
 - Add more namespaces and group things better when it apparent how they should be grouped.
