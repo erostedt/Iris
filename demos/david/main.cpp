@@ -224,25 +224,23 @@ int main()
 
     const float xstart = 0.0;
     const float xend = 2.0;
+    const size_t xsteps = 100;
 
     const float ystart = -1.0;
     const float yend = 3.0;
+    const size_t ysteps = 200;
 
     const float zstart = -1.0;
     const float zend = 0.5;
+    const size_t zsteps = 150;
 
-    const float scale = 50.0;
+    const float dx = (xend - xstart) / xsteps;
+    const float dy = (yend - ystart) / ysteps;
+    const float dz = (zend - zstart) / zsteps;
 
-    size_t nx = scale * (xend - xstart);
-    size_t ny = scale * (yend - ystart);
-    size_t nz = scale * (zend - zstart);
-    const float dx = (xend - xstart) / nx;
-    const float dy = (yend - ystart) / ny;
-    const float dz = (zend - zstart) / nz;
-
-    Range xrange{xstart, xend, nx};
-    Range yrange{ystart, yend, ny};
-    Range zrange{zstart, zend, nz};
+    Range xrange{xstart, xend, xsteps};
+    Range yrange{ystart, yend, ysteps};
+    Range zrange{zstart, zend, zsteps};
 
     std::vector<DVoxel> voxels = MakeVoxels(xrange, yrange, zrange);
     const auto images = LoadImages("../demos/david/data");
@@ -283,7 +281,6 @@ int main()
             cvoxels.push_back({{{x, y, z}, {dx, dy, dz}}, {r, g, b, 1.0}});
         }
     }
-    std::cout << cvoxels.size() << std::endl;
     auto voxel_mesh = CreateVoxelMesh(cvoxels);
 
 
