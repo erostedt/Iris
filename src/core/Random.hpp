@@ -41,7 +41,7 @@ template <typename T> T Uniform(T min, T max)
 
 template <typename T> T Normal(T min, T max)
 {
-    return GetRandomNumberGenerator().Uniform<T>(min, max);
+    return GetRandomNumberGenerator().Normal<T>(min, max);
 }
 
 } // namespace Random
