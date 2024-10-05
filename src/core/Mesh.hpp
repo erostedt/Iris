@@ -1,7 +1,6 @@
 #pragma once
 
 #include "IndexBuffer.hpp"
-#include "OpenGL.hpp"
 #include "VertexArray.hpp"
 #include "VertexBuffer.hpp"
 

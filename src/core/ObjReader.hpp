@@ -11,36 +11,13 @@
 #include <unordered_map>
 #include <vector>
 
-#include <Mesh.hpp>
+#include "Hash.hpp"
+#include "Mesh.hpp"
 
 namespace Iris
 {
 
 using VertexIndices = std::vector<uint32_t>;
-
-struct Tuple3Hash
-{
-    template <typename... Args> std::size_t operator()(const std::tuple<Args...> &t) const
-    {
-        std::size_t seed = 0;
-        hashCombine(seed, std::get<0>(t));
-        hashCombine(seed, std::get<1>(t));
-        hashCombine(seed, std::get<2>(t));
-        return seed;
-    }
-
-  private:
-    template <typename T> void hashCombine(std::size_t &seed, const T &value) const
-    {
-        std::hash<T> hasher;
-        seed ^= hasher(value) + 0x9e3779b9 + (seed << 6) + (seed >> 2);
-    }
-};
-
-static std::tuple<uint32_t, uint32_t, uint32_t> VertexIndicesToTuple(const VertexIndices &vertex_indices)
-{
-    return {vertex_indices.at(0), vertex_indices.at(1), vertex_indices.at(2)};
-}
 
 static VertexIndices parse_vertex_indices(const std::string &vertex_indices_string)
 {
@@ -90,7 +67,7 @@ static inline RenderObject<TextureVertex> read_obj_file(const std::filesystem::p
     std::vector<TextureVertex> vertices;
     std::vector<uint32_t> indices;
 
-    std::unordered_map<std::tuple<uint32_t, uint32_t, uint32_t>, uint32_t, Tuple3Hash> seen_vertices;
+    std::unordered_map<std::vector<uint32_t>, uint32_t, VectorHasher> seen_vertices;
     uint32_t current_index = 0;
     while (std::getline(file, line))
     {
@@ -132,19 +109,18 @@ static inline RenderObject<TextureVertex> read_obj_file(const std::filesystem::p
 
             for (const auto &vertex_indices : face_indices)
             {
-                const auto multi_index = VertexIndicesToTuple(vertex_indices);
-                if (auto pos = seen_vertices.find(multi_index); pos != seen_vertices.end())
+                if (auto pos = seen_vertices.find(vertex_indices); pos != seen_vertices.end())
                 {
                     indices.push_back(pos->second);
                 }
                 else
                 {
                     TextureVertex vertex;
-                    vertex.position = positions.at(std::get<0>(multi_index));
-                    vertex.texture_coordinates = texture_coordinates.at(std::get<1>(multi_index));
-                    vertex.normal = normals.at(std::get<2>(multi_index));
+                    vertex.position = positions.at(vertex_indices[0]);
+                    vertex.texture_coordinates = texture_coordinates.at(vertex_indices[1]);
+                    vertex.normal = normals.at(vertex_indices[2]);
 
-                    seen_vertices[multi_index] = current_index;
+                    seen_vertices[vertex_indices] = current_index;
                     indices.push_back(current_index);
                     vertices.push_back(vertex);
                     current_index++;
