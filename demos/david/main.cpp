@@ -1,5 +1,3 @@
-#include "OpenGL.hpp"
-
 #include <algorithm>
 #include <execution>
 #include <cstdint>
@@ -15,7 +13,6 @@
 #include <opencv2/opencv.hpp>
 
 #include "Camera.hpp"
-#include "Color.hpp"
 #include "Primitives.hpp"
 #include "RenderObject.hpp"
 #include "Renderer.hpp"
@@ -69,7 +66,6 @@ std::vector<cv::Mat> LoadProjectionMatrices(const fs::path& directory)
         }
         projection_matrices.push_back(LoadProjectionMatrix(projection_matrix_path));
     }
-    std::cout << projection_matrices.size() << std::endl;
     return projection_matrices;
 }
 
@@ -86,7 +82,6 @@ std::vector<cv::Mat> LoadImages(const fs::path& directory)
         }
         images.push_back(cv::imread(image_path));
     }
-    std::cout << images.size() << std::endl;
     return images;
 }
 
@@ -97,7 +92,6 @@ cv::Mat MakeMask(int width, int height, cv::Rect rect)
     return mask;
 }
 
-
 cv::Mat ExtractSilhouette(const cv::Mat &bgr_image, uint8_t threshold, cv::Rect roi)
 {
     cv::Mat gray;
@@ -107,8 +101,6 @@ cv::Mat ExtractSilhouette(const cv::Mat &bgr_image, uint8_t threshold, cv::Rect 
     cv::threshold(gray, bin, threshold, 255, CV_8U);
 
     const auto mask = MakeMask(bgr_image.cols, bgr_image.rows, roi);
-    std::cout << bin.rows << " " << bin.cols << std::endl;
-    std::cout << mask.rows << " " << mask.cols << std::endl;
     cv::Mat result;
     bin.copyTo(result, mask);
     return result;
@@ -126,7 +118,7 @@ struct Range
     size_t steps;
 };
 
-std::vector<DVoxel> make_voxels(Range x, Range y, Range z)
+std::vector<DVoxel> MakeVoxels(Range x, Range y, Range z)
 {
     std::vector<DVoxel> voxels{};
     voxels.reserve(x.steps * y.steps * z.steps);
@@ -157,12 +149,12 @@ std::vector<DVoxel> make_voxels(Range x, Range y, Range z)
     return voxels;
 }
 
-inline bool inside(const cv::Mat &image, int x, int y)
+inline bool Inside(const cv::Mat &image, int x, int y)
 {
     return (x >= 0) && (x < image.cols) && (y >= 0) && (y < image.rows);
 }
 
-void visual_hull(std::vector<DVoxel> &voxels, const std::vector<cv::Mat> &silhouettes, const std::vector<cv::Mat> &pmats)
+void VisualHull(std::vector<DVoxel> &voxels, const std::vector<cv::Mat> &silhouettes, const std::vector<cv::Mat> &pmats)
 {
     size_t n_samples = silhouettes.size();
     std::for_each(std::execution::par, voxels.begin(), voxels.end(), [&](DVoxel &voxel) {
@@ -174,7 +166,7 @@ void visual_hull(std::vector<DVoxel> &voxels, const std::vector<cv::Mat> &silhou
             int u = image_coordinates.at<float>(0) / image_coordinates.at<float>(2);
             int v = image_coordinates.at<float>(1) / image_coordinates.at<float>(2);
 
-            if (inside(silhouette, u, v) && (silhouette.at<uint8_t>(v, u) == 255))
+            if (Inside(silhouette, u, v) && (silhouette.at<uint8_t>(v, u) == 255))
             {
                 voxel.hits++;
             }
@@ -182,7 +174,7 @@ void visual_hull(std::vector<DVoxel> &voxels, const std::vector<cv::Mat> &silhou
     });
 }
 
-std::vector<float> bounds(const std::vector<DVoxel> &voxels)
+std::vector<float> Bounds(const std::vector<DVoxel> &voxels)
 {
 
     float xmin = std::numeric_limits<float>::max();
@@ -252,7 +244,7 @@ int main()
     Range yrange{ystart, yend, ny};
     Range zrange{zstart, zend, nz};
 
-    std::vector<DVoxel> voxels = make_voxels(xrange, yrange, zrange);
+    std::vector<DVoxel> voxels = MakeVoxels(xrange, yrange, zrange);
     const auto images = LoadImages("../demos/david/data");
     const auto projection_matrices = LoadProjectionMatrices("../demos/david/data");
 
@@ -270,8 +262,8 @@ int main()
     }
     cv::destroyAllWindows();
 
-    visual_hull(voxels, silhouettes, projection_matrices);
-    std::vector<float> bnds = bounds(voxels);
+    VisualHull(voxels, silhouettes, projection_matrices);
+    std::vector<float> bnds = Bounds(voxels);
     centrize(voxels, bnds);
 
     size_t threshold = 15;
