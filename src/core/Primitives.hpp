@@ -176,15 +176,18 @@ static inline RenderObject CreateTriangle()
     return RenderObject(std::move(mesh));
 }
 
-/*
 
-
-
-static inline RenderObject CreateSphere(const Color &color, size_t latitudes = 20, size_t longitudes = 20,
-                                                float radius = 0.5f)
+static inline RenderObject CreateSphere(size_t latitudes = 20, size_t longitudes = 20, float radius = 0.5f)
 {
-    std::vector<Vertex> vertices;
+    std::vector<glm::vec3> positions;
+    std::vector<glm::vec3> normals;
+    std::vector<glm::vec2> texture_coordinates;
+
     std::vector<uint32_t> indices;
+    positions.reserve((latitudes + 1) * (longitudes + 1));
+    normals.reserve((latitudes + 1) * (longitudes + 1));
+    texture_coordinates.reserve((latitudes + 1) * (longitudes + 1));
+    indices.reserve(latitudes * longitudes * 6);
 
     for (size_t r = 0; r <= latitudes; ++r)
     {
@@ -197,8 +200,9 @@ static inline RenderObject CreateSphere(const Color &color, size_t latitudes = 2
             float phi = s * 2.0f * glm::pi<float>() / longitudes;
             float x = r_sin_theta * std::cos(phi);
             float z = r_sin_theta * std::sin(phi);
-
-            vertices.push_back({{x, y, z}, color});
+            positions.push_back({x, y, z});
+            normals.push_back(glm::normalize(glm::vec3(x, y, z)));
+            texture_coordinates.push_back({static_cast<float>(s) / longitudes, static_cast<float>(r) / latitudes});
         }
     }
 
@@ -218,9 +222,11 @@ static inline RenderObject CreateSphere(const Color &color, size_t latitudes = 2
             indices.push_back(next_offset + (s + 1));
         }
     }
-    auto mesh = std::make_unique<Mesh>(std::move(vertices), std::move(indices));
+    auto mesh = std::make_unique<Mesh>(std::move(positions), std::move(normals), std::move(texture_coordinates), std::move(indices));
     return RenderObject(std::move(mesh));
 }
+
+/*
 
 static inline RenderObject<Vertex> CreatePointCloud(const std::vector<ColoredSphere> &colored_spheres,
                                                     size_t latitudes = 20, size_t longitudes = 20)
