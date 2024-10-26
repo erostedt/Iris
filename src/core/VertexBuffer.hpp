@@ -12,12 +12,12 @@ namespace Iris
 template <typename T> class FixedVertexBuffer : Buffer
 {
   public:
-    FixedVertexBuffer(const std::vector<T> &&vertices, const VertexLayout &layout)
+    FixedVertexBuffer(const std::vector<T> &&vertices, const VertexLayout &layout, uint32_t usage=GL_STATIC_DRAW)
         : m_vertices(vertices), m_layout(layout)
     {
         glGenBuffers(1, &m_id);
         Bind();
-        glBufferData(GL_ARRAY_BUFFER, sizeof(T) * vertices.size(), vertices.data(), GL_STATIC_DRAW);
+        glBufferData(GL_ARRAY_BUFFER, sizeof(T) * vertices.size(), vertices.data(), usage);
         Unbind();
     }
 
