@@ -10,6 +10,8 @@
 #include <filesystem>
 #include <vector>
 
+#include "Color.hpp"
+
 namespace Iris
 {
 
@@ -26,6 +28,17 @@ const TextureParameters DEFAULT_TEXTURE_PARAMETERS = {GL_LINEAR, GL_LINEAR, GL_C
 class Texture
 {
   public:
+    static Texture ColorTexture(Color color, TextureParameters parameters = DEFAULT_TEXTURE_PARAMETERS)
+    {
+        Texture texture;
+        ByteColor c = FloatColorToByte(color);
+        std::vector<uint8_t> m_data = {c.r, c.g, c.b, c.a};
+        texture.m_width = 1;
+        texture.m_height = 1;
+        texture.m_channels = STBI_rgb_alpha;
+        texture.GenerateTexture(parameters);
+        return texture;
+    }
 
     static Texture FromFile(const std::filesystem::path &filepath,
                             TextureParameters parameters = DEFAULT_TEXTURE_PARAMETERS)
@@ -43,7 +56,6 @@ class Texture
         texture.m_width = width;
         texture.m_height = height;
         texture.m_channels = channels;
-        texture.m_bytes_per_pixel = STBI_rgb_alpha;
         texture.GenerateTexture(parameters);
 
         stbi_image_free(data);
@@ -85,7 +97,6 @@ private:
     uint32_t m_width;
     uint32_t m_height;
     uint32_t m_channels;
-    uint32_t m_bytes_per_pixel;
     uint32_t m_id;
 };
 
