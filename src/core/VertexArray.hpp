@@ -11,6 +11,10 @@ namespace Iris
 template <typename T> class VertexArray : Buffer
 {
   public:
+    VertexArray()
+    {
+        glGenVertexArrays(1, &m_id);
+    }
     VertexArray(const VertexAttributeBuffer<T> &vertex_buffer)
     {
         glGenVertexArrays(1, &m_id);
