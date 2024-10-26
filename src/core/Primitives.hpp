@@ -16,10 +16,17 @@ namespace Iris
 
 static inline RenderObject<Vertex> CreateCube(const Color &color)
 {
-    std::vector<Vertex> vertices = {{{-0.5f, -0.5f, -0.5f}, color}, {{0.5f, -0.5f, -0.5f}, color},
-                                    {{0.5f, 0.5f, -0.5f}, color},   {{-0.5f, 0.5f, -0.5f}, color},
-                                    {{-0.5f, -0.5f, 0.5f}, color},  {{0.5f, -0.5f, 0.5f}, color},
-                                    {{0.5f, 0.5f, 0.5f}, color},    {{-0.5f, 0.5f, 0.5f}, color}};
+    std::vector<glm::vec3> positions = {
+        {-0.5f, -0.5f, -0.5f},
+        {0.5f, -0.5f, -0.5f},
+        {0.5f, 0.5f, -0.5f},
+        {-0.5f, 0.5f, -0.5f},
+        {-0.5f, -0.5f, 0.5f},
+        {0.5f, -0.5f, 0.5f},
+        {0.5f, 0.5f, 0.5f},
+        {-0.5f, 0.5f, 0.5f}
+    };
+    std::vector<glm::vec4> colors = {color, color, color, color, color, color, color, color};
 
     std::vector<uint32_t> indices = {0, 1, 2,
 
@@ -45,7 +52,7 @@ static inline RenderObject<Vertex> CreateCube(const Color &color)
 
                                      6, 7, 3};
 
-    auto mesh = std::make_unique<Mesh<Vertex>>(std::move(vertices), std::move(indices));
+    auto mesh = std::make_unique<Mesh<Vertex>>(std::move(positions), std::move(colors), std::move(indices));
     return RenderObject<Vertex>(std::move(mesh));
 }
 
