@@ -11,7 +11,7 @@ template <typename T> class Mesh
 {
   public:
     Mesh(std::vector<T> &&vertices, std::vector<uint32_t> &&indices)
-        : m_vertex_buffer(std::move(vertices), T::Layout()), m_vertex_array(m_vertex_buffer),
+        : m_vertex_buffer(std::move(vertices)), m_vertex_array(m_vertex_buffer),
           m_index_buffer(std::move(indices))
     {
     }

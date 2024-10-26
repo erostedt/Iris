@@ -2,6 +2,7 @@
 
 #include "OpenGL.hpp"
 
+#include "Vertex.hpp"
 #include "VertexBuffer.hpp"
 
 namespace Iris
@@ -61,7 +62,7 @@ template <typename T> class VertexArray : Buffer
     {
         Bind();
         vertex_buffer.Bind();
-        const VertexLayout &layout = vertex_buffer.Layout();
+        const VertexLayout &layout = Vertex::Layout();
         const auto &elements = layout.Elements();
         uint64_t offset = 0;
         for (unsigned int i = 0; i < elements.size(); ++i)
