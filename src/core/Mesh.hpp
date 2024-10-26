@@ -44,7 +44,7 @@ template <typename T> class Mesh
     VertexAttributeBuffer<glm::vec3> m_vertex_positions;
     VertexAttributeBuffer<glm::vec4> m_vertex_colors;
     FixedIndexBuffer m_index_buffer;
-    VertexArray<T> m_vertex_array;
+    VertexArray m_vertex_array;
 };
 
 } // namespace Iris

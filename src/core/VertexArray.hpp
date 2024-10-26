@@ -8,7 +8,7 @@
 namespace Iris
 {
 
-template <typename T> class VertexArray : Buffer
+class VertexArray : Buffer
 {
   public:
     VertexArray()
