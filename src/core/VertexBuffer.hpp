@@ -52,11 +52,6 @@ template <typename T> class VertexAttributeBuffer : Buffer
         glBindBuffer(GL_ARRAY_BUFFER, 0);
     }
 
-    const std::vector<T> &GetVertices() const
-    {
-        return m_data;
-    }
-
     const size_t Size() const
     {
         return m_data.size();

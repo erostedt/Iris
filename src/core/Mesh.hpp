@@ -30,21 +30,6 @@ template <typename T> class Mesh
         m_index_buffer.Unbind();
     }
 
-    const std::vector<T> &GetVertices() const
-    {
-        return m_vertex_buffer.GetVertices();
-    }
-
-    size_t NumVertices() const
-    {
-        return m_vertex_buffer.Size();
-    }
-
-    const std::vector<uint32_t> &GetIndices() const
-    {
-        return m_index_buffer.GetIndices();
-    }
-
     size_t NumIndices() const
     {
         return m_index_buffer.Size();
