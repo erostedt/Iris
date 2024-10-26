@@ -61,19 +61,3 @@ struct Vertex
         };
     }
 };
-
-struct TextureVertex
-{
-    glm::vec3 position;
-    glm::vec3 normal;
-    glm::vec2 texture_coordinates;
-
-    static VertexLayout Layout()
-    {
-        return {
-            {GL_FLOAT, sizeof(float), static_cast<uint32_t>(glm::vec3::length()), GL_FALSE},
-            {GL_FLOAT, sizeof(float), static_cast<uint32_t>(glm::vec3::length()), GL_FALSE},
-            {GL_FLOAT, sizeof(float), static_cast<uint32_t>(glm::vec2::length()), GL_FALSE},
-        };
-    }
-};
