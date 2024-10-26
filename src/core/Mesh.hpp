@@ -48,7 +48,7 @@ class Mesh
     VertexAttributeBuffer<glm::vec3> m_vertex_positions;
     VertexAttributeBuffer<glm::vec3> m_vertex_normals;
     VertexAttributeBuffer<glm::vec2> m_vertex_texture_coordinates;
-    FixedIndexBuffer m_index_buffer;
+    IndexBuffer m_index_buffer;
     VertexArray m_vertex_array;
 };
 

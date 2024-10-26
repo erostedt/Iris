@@ -8,17 +8,17 @@
 namespace Iris
 {
 
-class FixedIndexBuffer : Buffer
+class IndexBuffer : Buffer
 {
   public:
-    FixedIndexBuffer(const std::vector<uint32_t> &&indices);
-    virtual ~FixedIndexBuffer();
+    IndexBuffer(const std::vector<uint32_t> &&indices);
+    virtual ~IndexBuffer();
 
-    FixedIndexBuffer(const FixedIndexBuffer &other) = delete;
-    FixedIndexBuffer &operator=(const FixedIndexBuffer &other) = delete;
+    IndexBuffer(const IndexBuffer &other) = delete;
+    IndexBuffer &operator=(const IndexBuffer &other) = delete;
 
-    FixedIndexBuffer(FixedIndexBuffer &&other) noexcept;
-    FixedIndexBuffer &operator=(FixedIndexBuffer &&other) noexcept;
+    IndexBuffer(IndexBuffer &&other) noexcept;
+    IndexBuffer &operator=(IndexBuffer &&other) noexcept;
 
     void Bind() const override;
     void Unbind() const override;
