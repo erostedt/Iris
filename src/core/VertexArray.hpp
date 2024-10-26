@@ -2,7 +2,6 @@
 
 #include "OpenGL.hpp"
 
-#include "Vertex.hpp"
 #include "VertexBuffer.hpp"
 
 namespace Iris
@@ -58,7 +57,7 @@ class VertexArray : Buffer
 
   private:
     uint32_t m_vertex_attribute_count{0};
-    uint32_t m_id;
+    uint32_t m_id{0};
 };
 
 }; // namespace Iris
