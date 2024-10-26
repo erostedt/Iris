@@ -26,6 +26,9 @@ static inline RenderObject<Vertex> CreateCube(const Color &color)
         {0.5f, 0.5f, 0.5f},
         {-0.5f, 0.5f, 0.5f}
     };
+
+    std::vector<glm::vec3> normals;
+    std::vector<glm::vec2> texture_coordinates;
     std::vector<glm::vec4> colors = {color, color, color, color, color, color, color, color};
 
     std::vector<uint32_t> indices = {0, 1, 2,
@@ -52,7 +55,7 @@ static inline RenderObject<Vertex> CreateCube(const Color &color)
 
                                      6, 7, 3};
 
-    auto mesh = std::make_unique<Mesh<Vertex>>(std::move(positions), std::move(colors), std::move(indices));
+    auto mesh = std::make_unique<Mesh<Vertex>>(std::move(positions), std::move(normals), std::move(texture_coordinates), std::move(colors), std::move(indices));
     return RenderObject<Vertex>(std::move(mesh));
 }
 
