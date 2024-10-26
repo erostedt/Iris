@@ -51,7 +51,7 @@ template <typename T> class Mesh
     }
 
   private:
-    FixedVertexBuffer<T> m_vertex_buffer;
+    VertexAttributeBuffer<T> m_vertex_buffer;
     VertexArray<T> m_vertex_array;
     FixedIndexBuffer m_index_buffer;
 };

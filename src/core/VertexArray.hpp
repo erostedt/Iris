@@ -10,7 +10,7 @@ namespace Iris
 template <typename T> class VertexArray : Buffer
 {
   public:
-    VertexArray(const FixedVertexBuffer<T> &vertex_buffer)
+    VertexArray(const VertexAttributeBuffer<T> &vertex_buffer)
     {
         glGenVertexArrays(1, &m_id);
         AddVertexLayout(vertex_buffer);
@@ -48,7 +48,7 @@ template <typename T> class VertexArray : Buffer
     }
 
   private:
-    void AddVertexLayout(const FixedVertexBuffer<T> &vertex_buffer)
+    void AddVertexLayout(const VertexAttributeBuffer<T> &vertex_buffer)
     {
         Bind();
         vertex_buffer.Bind();

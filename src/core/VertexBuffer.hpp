@@ -9,10 +9,10 @@
 namespace Iris
 {
 
-template <typename T> class FixedVertexBuffer : Buffer
+template <typename T> class VertexAttributeBuffer : Buffer
 {
   public:
-    FixedVertexBuffer(const std::vector<T> &&vertices, const VertexLayout &layout, uint32_t usage=GL_STATIC_DRAW)
+    VertexAttributeBuffer(const std::vector<T> &&vertices, const VertexLayout &layout, uint32_t usage=GL_STATIC_DRAW)
         : m_vertices(vertices), m_layout(layout)
     {
         glGenBuffers(1, &m_id);
@@ -21,22 +21,22 @@ template <typename T> class FixedVertexBuffer : Buffer
         Unbind();
     }
 
-    virtual ~FixedVertexBuffer()
+    virtual ~VertexAttributeBuffer()
     {
         glDeleteBuffers(1, &m_id);
     }
 
-    FixedVertexBuffer(const FixedVertexBuffer &other) = delete;
-    FixedVertexBuffer &operator=(const FixedVertexBuffer &other) = delete;
+    VertexAttributeBuffer(const VertexAttributeBuffer &other) = delete;
+    VertexAttributeBuffer &operator=(const VertexAttributeBuffer &other) = delete;
 
-    FixedVertexBuffer(FixedVertexBuffer &&other) noexcept
+    VertexAttributeBuffer(VertexAttributeBuffer &&other) noexcept
     {
         std::swap(m_vertices, other.m_vertices);
         m_layout = other.m_layout;
         m_id = other.m_id;
         other.m_id = 0;
     }
-    FixedVertexBuffer &operator=(FixedVertexBuffer &&other) noexcept
+    VertexAttributeBuffer &operator=(VertexAttributeBuffer &&other) noexcept
     {
         std::swap(m_vertices, other.m_vertices);
         m_layout = other.m_layout;
