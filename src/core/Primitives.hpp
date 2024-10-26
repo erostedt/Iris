@@ -301,62 +301,142 @@ static inline RenderObject CreatePointCloud(const std::vector<glm::vec3>& center
     return RenderObject(std::move(mesh));
 }
 
-/*
-static inline RenderObject<Vertex> CreateVoxelMesh(const std::vector<ColoredVoxel> &colored_voxels)
+static inline RenderObject CreateVoxelMesh(const std::vector<glm::vec3>& centers, float width, float height, float depth)
 {
-    const size_t VOXEL_CORNERS = 8;
-    std::vector<Vertex> vertices{};
-    std::vector<uint32_t> indices{};
-    vertices.reserve(VOXEL_CORNERS * colored_voxels.size());
-    std::array<uint32_t, 36> unshifted_indicies = {0, 1, 2,
+    const size_t SINGLE_CUBE_VERTEX_POINTS = 24;
+    std::vector<glm::vec3> positions;
+    std::vector<glm::vec3> normals;
+    std::vector<glm::vec2> texture_coordinates;
+    std::vector<uint32_t> indices;
 
-                                                   2, 3, 0,
+    positions.reserve(SINGLE_CUBE_VERTEX_POINTS * centers.size());
+    normals.reserve(SINGLE_CUBE_VERTEX_POINTS * centers.size());
+    texture_coordinates.reserve(SINGLE_CUBE_VERTEX_POINTS * centers.size());
+    indices.reserve(SINGLE_CUBE_VERTEX_POINTS * centers.size());
 
-                                                   4, 5, 6,
 
-                                                   6, 7, 4,
+    std::vector<uint32_t> unshifted_indices = {
+    // Front face
+    0, 1, 2, 0, 2, 3,
+    // Back face
+    4, 5, 6, 4, 6, 7,
+    // Left face
+    8, 9, 10, 8, 10, 11,
+    // Right face
+    12, 13, 14, 12, 14, 15,
+    // Bottom face
+    16, 17, 18, 16, 18, 19,
+    // Top face
+    20, 21, 22, 20, 22, 23
+};
 
-                                                   0, 4, 7,
-
-                                                   7, 3, 0,
-
-                                                   1, 5, 6,
-
-                                                   6, 2, 1,
-
-                                                   0, 1, 5,
-
-                                                   5, 4, 0,
-
-                                                   3, 2, 6,
-
-                                                   6, 7, 3};
 
     size_t offset = 0;
-    for (const auto &voxel : colored_voxels)
+    float dx = 0.5f * width;
+    float dy = 0.5f * height;
+    float dz = 0.5f * depth;
+    for (auto center : centers)
     {
-        float dx = 0.5f * voxel.dimensions.x;
-        float dy = 0.5f * voxel.dimensions.y;
-        float dz = 0.5f * voxel.dimensions.z;
+        positions.push_back(center + glm::vec3(-dx, -dy, -dz));
+        positions.push_back(center + glm::vec3(dx, -dy, -dz));
+        positions.push_back(center + glm::vec3(dx, dy, -dz));
+        positions.push_back(center + glm::vec3(-dx, dy, -dz));
 
-        vertices.push_back({voxel.center + glm::vec3(-dx, -dy, -dz), voxel.color});
-        vertices.push_back({voxel.center + glm::vec3(dx, -dy, -dz), voxel.color});
-        vertices.push_back({voxel.center + glm::vec3(dx, dy, -dz), voxel.color});
-        vertices.push_back({voxel.center + glm::vec3(-dx, dy, -dz), voxel.color});
-        vertices.push_back({voxel.center + glm::vec3(-dx, -dy, dz), voxel.color});
-        vertices.push_back({voxel.center + glm::vec3(dx, -dy, dz), voxel.color});
-        vertices.push_back({voxel.center + glm::vec3(dx, dy, dz), voxel.color});
-        vertices.push_back({voxel.center + glm::vec3(-dx, dy, dz), voxel.color});
+        positions.push_back(center + glm::vec3(-dx, -dy, dz));
+        positions.push_back(center + glm::vec3(dx, -dy, dz));
+        positions.push_back(center + glm::vec3(dx, dy, dz));
+        positions.push_back(center + glm::vec3(-dx, dy, dz));
 
-        for (size_t index : unshifted_indicies)
+        positions.push_back(center + glm::vec3(-dx, -dy, -dz));
+        positions.push_back(center + glm::vec3(-dx, -dy, dz));
+        positions.push_back(center + glm::vec3(-dx, dy, dz));
+        positions.push_back(center + glm::vec3(-dx, dy, -dz));
+
+        positions.push_back(center + glm::vec3(dx, -dy, -dz));
+        positions.push_back(center + glm::vec3(dx, -dy, dz));
+        positions.push_back(center + glm::vec3(dx, dy, dz));
+        positions.push_back(center + glm::vec3(dx, dy, -dz));
+
+        positions.push_back(center + glm::vec3(-dx, -dy, dz));
+        positions.push_back(center + glm::vec3(dx, -dy, dz));
+        positions.push_back(center + glm::vec3(dx, -dy, -dz));
+        positions.push_back(center + glm::vec3(-dx, -dy, -dz));
+
+        positions.push_back(center + glm::vec3(-dx, -dy, -dz));
+        positions.push_back(center + glm::vec3(dx, dy, -dz));
+        positions.push_back(center + glm::vec3(dx, dy, dz));
+        positions.push_back(center + glm::vec3(-dx, dy, dz));
+
+        //---------
+        normals.push_back(FORWARD);
+        normals.push_back(FORWARD);
+        normals.push_back(FORWARD);
+        normals.push_back(FORWARD);
+
+        normals.push_back(BACKWARD);
+        normals.push_back(BACKWARD);
+        normals.push_back(BACKWARD);
+        normals.push_back(BACKWARD);
+
+        normals.push_back(LEFT);
+        normals.push_back(LEFT);
+        normals.push_back(LEFT);
+        normals.push_back(LEFT);
+
+        normals.push_back(RIGHT);
+        normals.push_back(RIGHT);
+        normals.push_back(RIGHT);
+        normals.push_back(RIGHT);
+
+        normals.push_back(DOWN);
+        normals.push_back(DOWN);
+        normals.push_back(DOWN);
+        normals.push_back(DOWN);
+
+        normals.push_back(UP);
+        normals.push_back(UP);
+        normals.push_back(UP);
+        normals.push_back(UP);
+
+        //--------
+        texture_coordinates.push_back({0.0f, 0.0f});
+        texture_coordinates.push_back({1.0f, 0.0f});
+        texture_coordinates.push_back({1.0f, 1.0f});
+        texture_coordinates.push_back({0.0f, 1.0f});
+        
+        texture_coordinates.push_back({0.0f, 0.0f});
+        texture_coordinates.push_back({1.0f, 0.0f});
+        texture_coordinates.push_back({1.0f, 1.0f});
+        texture_coordinates.push_back({0.0f, 1.0f});
+
+        texture_coordinates.push_back({0.0f, 0.0f});
+        texture_coordinates.push_back({1.0f, 0.0f});
+        texture_coordinates.push_back({1.0f, 1.0f});
+        texture_coordinates.push_back({0.0f, 1.0f});
+
+        texture_coordinates.push_back({0.0f, 0.0f});
+        texture_coordinates.push_back({1.0f, 0.0f});
+        texture_coordinates.push_back({1.0f, 1.0f});
+        texture_coordinates.push_back({0.0f, 1.0f});
+
+        texture_coordinates.push_back({0.0f, 0.0f});
+        texture_coordinates.push_back({1.0f, 0.0f});
+        texture_coordinates.push_back({1.0f, 1.0f});
+        texture_coordinates.push_back({0.0f, 1.0f});
+
+        texture_coordinates.push_back({0.0f, 0.0f});
+        texture_coordinates.push_back({1.0f, 0.0f});
+        texture_coordinates.push_back({1.0f, 1.0f});
+        texture_coordinates.push_back({0.0f, 1.0f});
+
+        for (size_t index : unshifted_indices)
         {
             indices.push_back(index + offset);
         }
-        offset += VOXEL_CORNERS;
+        offset += SINGLE_CUBE_VERTEX_POINTS;
     }
-    auto mesh = std::make_unique<Mesh>(std::move(vertices), std::move(indices));
+    auto mesh = std::make_unique<Mesh>(std::move(positions), std::move(normals), std::move(texture_coordinates), std::move(indices));
     return RenderObject(std::move(mesh));
 }
-*/
 
 } // namespace Iris
