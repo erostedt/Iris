@@ -1,5 +1,4 @@
 #pragma once
-#include "RenderObject.hpp"
 
 #include <filesystem>
 #include <fstream>
@@ -12,6 +11,7 @@
 
 #include "Hash.hpp"
 #include "Mesh.hpp"
+#include "RenderObject.hpp"
 
 namespace Iris
 {
@@ -66,7 +66,6 @@ static inline RenderObject read_obj_file(const std::filesystem::path &objpath)
     std::vector<glm::vec3> vertex_positions;
     std::vector<glm::vec3> vertex_normals;
     std::vector<glm::vec2> vertex_texture_coordinates;
-    std::vector<glm::vec4> vertex_colors;
 
     std::vector<uint32_t> indices;
 
@@ -130,7 +129,7 @@ static inline RenderObject read_obj_file(const std::filesystem::path &objpath)
         }
     }
 
-    auto mesh = std::make_unique<Mesh>(std::move(vertex_positions), std::move(vertex_normals), std::move(vertex_texture_coordinates), std::move(vertex_colors), std::move(indices));
+    auto mesh = std::make_unique<Mesh>(std::move(vertex_positions), std::move(vertex_normals), std::move(vertex_texture_coordinates), std::move(indices));
     return RenderObject(std::move(mesh));
 }
 
