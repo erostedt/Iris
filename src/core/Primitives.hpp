@@ -83,8 +83,7 @@ static inline RenderObject CreateQuad()
     return RenderObject(std::move(mesh));
 }
 
-/*
-static inline RenderObject<Vertex> CreateTriangle(const Color &color)
+static inline RenderObject CreateTriangle(const Color &color)
 {
     std::vector<glm::vec3> positions = {
         {-0.5f, -0.5f, 0.0f},
@@ -92,10 +91,16 @@ static inline RenderObject<Vertex> CreateTriangle(const Color &color)
         {0.5f, -0.5f, 0.0f}
     };
 
+    std::vector<glm::vec3> normals {FORWARD, FORWARD, FORWARD};
+    std::vector<glm::vec2> texture_coordinates;
+    std::vector<glm::vec4> colors {color, color, color};
+
     std::vector<uint32_t> indices = {0, 1, 2};
-    auto mesh = std::make_unique<Mesh>(std::move(vertices), std::move(indices));
+    auto mesh = std::make_unique<Mesh>(std::move(positions), std::move(normals), std::move(texture_coordinates), std::move(colors), std::move(indices));
     return RenderObject(std::move(mesh));
 }
+
+/*
 
 
 
