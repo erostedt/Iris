@@ -3,6 +3,7 @@
 
 #include "Primitives.hpp"
 #include "Renderer.hpp"
+#include "Texture.hpp"
 #include "Shader.hpp"
 #include "Window.hpp"
 
@@ -23,6 +24,8 @@ int main()
     }
 
     auto triangle = CreateTriangle(RED);
+    Texture texture = Texture::ColorTexture(GREEN);
+    texture.Bind();
     const fs::path shaders_path = "../examples/triangle/shaders";
     const uint32_t shader = create_shader(shaders_path / "vertex.vert", shaders_path / "fragment.frag");
 

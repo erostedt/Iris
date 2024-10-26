@@ -92,7 +92,12 @@ static inline RenderObject CreateTriangle(const Color &color)
     };
 
     std::vector<glm::vec3> normals {FORWARD, FORWARD, FORWARD};
-    std::vector<glm::vec2> texture_coordinates;
+    std::vector<glm::vec2> texture_coordinates
+    {
+        {0.0f, 0.0f},
+        {0.5f, 1.0f},
+        {1.0f, 0.0f}
+    };
     std::vector<glm::vec4> colors {color, color, color};
 
     std::vector<uint32_t> indices = {0, 1, 2};

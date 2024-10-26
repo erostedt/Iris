@@ -32,7 +32,7 @@ class Texture
     {
         Texture texture;
         ByteColor c = FloatColorToByte(color);
-        std::vector<uint8_t> m_data = {c.r, c.g, c.b, c.a};
+        texture.m_data = {c.r, c.g, c.b, c.a};
         texture.m_width = 1;
         texture.m_height = 1;
         texture.m_channels = STBI_rgb_alpha;
