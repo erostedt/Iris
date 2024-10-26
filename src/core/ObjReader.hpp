@@ -1,6 +1,5 @@
 #pragma once
 #include "RenderObject.hpp"
-#include "Vertex.hpp"
 
 #include <filesystem>
 #include <fstream>
@@ -61,10 +60,14 @@ static inline RenderObject read_obj_file(const std::filesystem::path &objpath)
 
     std::string line;
     std::vector<glm::vec3> positions;
-    std::vector<glm::vec2> texture_coordinates;
     std::vector<glm::vec3> normals;
+    std::vector<glm::vec2> texture_coordinates;
 
-    std::vector<TextureVertex> vertices;
+    std::vector<glm::vec3> vertex_positions;
+    std::vector<glm::vec3> vertex_normals;
+    std::vector<glm::vec2> vertex_texture_coordinates;
+    std::vector<glm::vec4> vertex_colors;
+
     std::vector<uint32_t> indices;
 
     std::unordered_map<std::vector<uint32_t>, uint32_t, VectorHasher> seen_vertices;
@@ -115,21 +118,19 @@ static inline RenderObject read_obj_file(const std::filesystem::path &objpath)
                 }
                 else
                 {
-                    TextureVertex vertex;
-                    vertex.position = positions.at(vertex_indices[0]);
-                    vertex.texture_coordinates = texture_coordinates.at(vertex_indices[1]);
-                    vertex.normal = normals.at(vertex_indices[2]);
+                    vertex_positions.push_back(positions.at(vertex_indices[0]));
+                    vertex_normals.push_back(normals.at(vertex_indices[2]));
+                    vertex_texture_coordinates .push_back(texture_coordinates.at(vertex_indices[1]));
 
                     seen_vertices[vertex_indices] = current_index;
                     indices.push_back(current_index);
-                    vertices.push_back(vertex);
                     current_index++;
                 }
             }
         }
     }
 
-    auto mesh = std::make_unique<Mesh>(std::move(vertices), std::move(indices));
+    auto mesh = std::make_unique<Mesh>(std::move(vertex_positions), std::move(vertex_normals), std::move(vertex_texture_coordinates), std::move(vertex_colors), std::move(indices));
     return RenderObject(std::move(mesh));
 }
 
