@@ -85,7 +85,7 @@ int main()
     auto voxel_mesh = CreateVoxelMesh(voxels);
 
     const fs::path shaders_path = "../examples/voxel_mesh/shaders";
-    const uint32_t shader = create_shader(shaders_path / "vertex.vert", shaders_path / "fragment.frag");
+    const uint32_t shader = CreateShader(shaders_path / "vertex.vert", shaders_path / "fragment.frag");
 
     float xrot = 0.0f;
     float yrot = 0.0f;

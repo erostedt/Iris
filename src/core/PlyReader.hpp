@@ -10,7 +10,7 @@
 
 #include <glm/glm.hpp>
 
-inline void swap_endianess(float &flt)
+inline void SwapEndianess(float &flt)
 {
     char *byte = (char *)&flt;
 
@@ -23,7 +23,7 @@ inline void swap_endianess(float &flt)
     byte[2] = tmp;
 }
 
-inline int first_int_in_string(std::string_view str_view)
+inline int FirstIntInString(std::string_view str_view)
 {
     size_t curr = str_view.find_first_of("0123456789");
     std::stringstream ss;
@@ -38,7 +38,7 @@ inline int first_int_in_string(std::string_view str_view)
     return out;
 }
 
-inline std::optional<std::vector<glm::vec3>> point_cloud_3d_from_ply(const std::filesystem::path &file_path)
+inline std::optional<std::vector<glm::vec3>> PointCloud3dFromPly(const std::filesystem::path &file_path)
 {
     std::ifstream file(file_path, std::ios::binary);
     if (!file.is_open())
@@ -47,13 +47,13 @@ inline std::optional<std::vector<glm::vec3>> point_cloud_3d_from_ply(const std::
     }
 
     std::string line;
-    int64_t num_vertices{0};
+    int64_t num_vertices = 0;
     while (std::getline(file, line))
     {
 
         if (line.find("vertex") != std::string::npos)
         {
-            num_vertices = first_int_in_string(line);
+            num_vertices = FirstIntInString(line);
         }
 
         if (line.find("end_header") != std::string::npos)
@@ -68,12 +68,12 @@ inline std::optional<std::vector<glm::vec3>> point_cloud_3d_from_ply(const std::
     }
     std::vector<glm::vec3> points;
     glm::vec3 point;
-    for (int64_t i{0}; i < num_vertices; i++)
+    for (int64_t i = 0; i < num_vertices; ++i)
     {
         file.read(reinterpret_cast<char *>(&point), sizeof(point));
-        swap_endianess(point.x);
-        swap_endianess(point.y);
-        swap_endianess(point.z);
+        SwapEndianess(point.x);
+        SwapEndianess(point.y);
+        SwapEndianess(point.z);
         points.push_back(point);
     }
 

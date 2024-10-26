@@ -57,7 +57,7 @@ int main()
     }
 
     const fs::path armadillo_path = "../examples/armadillo/data/armadillo.ply";
-    auto points = point_cloud_3d_from_ply(armadillo_path);
+    auto points = PointCloud3dFromPly(armadillo_path);
     if (!points)
     {
         std::cout << "Could not parse file" << std::endl;
@@ -65,7 +65,7 @@ int main()
     }
 
     const fs::path shaders_path = "../examples/armadillo/shaders";
-    uint32_t shader = create_shader(shaders_path / "vertex.vert", shaders_path / "fragment.frag");
+    uint32_t shader = CreateShader(shaders_path / "vertex.vert", shaders_path / "fragment.frag");
 
     BoundingBox bounds = bounding_box(*points).padded(1.0001f, 1.0001f, 1.0001f);
 

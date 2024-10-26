@@ -9,9 +9,8 @@
 #include <sstream>
 #include <string>
 
-#include "Exception.hpp"
 
-static inline std::string shader_type(uint32_t type)
+static inline std::string ShaderType(uint32_t type)
 {
     switch (type)
     {
@@ -26,7 +25,7 @@ static inline std::string shader_type(uint32_t type)
     }
 }
 
-static inline uint32_t compile_shader(const uint32_t type, const std::string &code)
+static inline uint32_t CompileShader(const uint32_t type, const std::string &code)
 {
     uint32_t id = glCreateShader(type);
     const char *src = code.c_str();
@@ -41,7 +40,7 @@ static inline uint32_t compile_shader(const uint32_t type, const std::string &co
         glGetShaderiv(id, GL_INFO_LOG_LENGTH, &length);
         char *message = static_cast<char *>(alloca(length * sizeof(char)));
         glGetShaderInfoLog(id, length, &length, message);
-        std::cout << "Failed to compile " << shader_type(type) << " shader" << std::endl;
+        std::cout << "Failed to compile " << ShaderType(type) << " shader" << std::endl;
         std::cout << message << std::endl;
         glDeleteShader(id);
         return 0;
@@ -49,7 +48,7 @@ static inline uint32_t compile_shader(const uint32_t type, const std::string &co
 
     return id;
 }
-static inline std::string read_file(const std::string &filepath)
+static inline std::string ReadFile(const std::string &filepath)
 {
     std::ifstream file(filepath);
     if (!file.is_open())
@@ -67,13 +66,13 @@ static inline std::string read_file(const std::string &filepath)
     return ss.str();
 }
 
-static inline uint32_t create_shader(const std::string &vertex_shader_path, const std::string &fragment_shader_path)
+static inline uint32_t CreateShader(const std::string &vertex_shader_path, const std::string &fragment_shader_path)
 {
     uint32_t program = glCreateProgram();
-    const std::string vsource = read_file(vertex_shader_path);
-    const std::string fsource = read_file(fragment_shader_path);
-    uint32_t vertex_shader = compile_shader(GL_VERTEX_SHADER, vsource);
-    uint32_t fragment_shader = compile_shader(GL_FRAGMENT_SHADER, fsource);
+    const std::string vsource = ReadFile(vertex_shader_path);
+    const std::string fsource = ReadFile(fragment_shader_path);
+    uint32_t vertex_shader = CompileShader(GL_VERTEX_SHADER, vsource);
+    uint32_t fragment_shader = CompileShader(GL_FRAGMENT_SHADER, fsource);
 
     glAttachShader(program, vertex_shader);
     glAttachShader(program, fragment_shader);

@@ -27,7 +27,7 @@ int main()
     Texture texture = Texture::ColorTexture(GREEN);
     texture.Bind();
     const fs::path shaders_path = "../examples/triangle/shaders";
-    const uint32_t shader = create_shader(shaders_path / "vertex.vert", shaders_path / "fragment.frag");
+    const uint32_t shader = CreateShader(shaders_path / "vertex.vert", shaders_path / "fragment.frag");
 
     const Renderer renderer;
     ProjectionCamera camera(45.0f, WINDOW_WIDTH, WINDOW_HEIGHT, 0.1f, 100.0f);

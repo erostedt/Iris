@@ -18,7 +18,7 @@ namespace Iris
 
 using VertexIndices = std::vector<uint32_t>;
 
-static VertexIndices parse_vertex_indices(const std::string &vertex_indices_string)
+static VertexIndices ParseVertexIndices(const std::string &vertex_indices_string)
 {
     std::istringstream stream(vertex_indices_string);
     std::string index_string;
@@ -32,7 +32,7 @@ static VertexIndices parse_vertex_indices(const std::string &vertex_indices_stri
     return vertex_indices;
 }
 
-static std::vector<VertexIndices> parse_face_indices(const std::string &line)
+static std::vector<VertexIndices> ParseFaceIndices(const std::string &line)
 {
     std::string vertex_indices_string;
     std::istringstream stream(line);
@@ -41,13 +41,13 @@ static std::vector<VertexIndices> parse_face_indices(const std::string &line)
     std::vector<VertexIndices> face_indices;
     while (stream >> vertex_indices_string)
     {
-        VertexIndices vertex_indices = parse_vertex_indices(vertex_indices_string);
+        VertexIndices vertex_indices = ParseVertexIndices(vertex_indices_string);
         face_indices.push_back(std::move(vertex_indices));
     }
     return face_indices;
 }
 
-static inline RenderObject read_obj_file(const std::filesystem::path &objpath)
+static inline RenderObject ReadObjFile(const std::filesystem::path &objpath)
 {
     assert(std::filesystem::exists(objpath));
     std::ifstream file(objpath);
@@ -107,7 +107,7 @@ static inline RenderObject read_obj_file(const std::filesystem::path &objpath)
         }
         else if (line.starts_with(face_start))
         {
-            const auto face_indices = parse_face_indices(line);
+            const auto face_indices = ParseFaceIndices(line);
 
             for (const auto &vertex_indices : face_indices)
             {

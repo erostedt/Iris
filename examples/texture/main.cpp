@@ -30,7 +30,7 @@ int main()
 
     auto quad = CreateQuad();
     const fs::path shaders_path{"../examples/texture/shaders"};
-    const uint32_t shader = create_shader(shaders_path / "vertex.vert", shaders_path / "fragment.frag");
+    const uint32_t shader = CreateShader(shaders_path / "vertex.vert", shaders_path / "fragment.frag");
 
     const Renderer renderer;
     gengar.Bind();
