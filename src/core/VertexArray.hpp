@@ -48,6 +48,15 @@ template <typename T> class VertexArray : Buffer
     }
 
   private:
+    template <typename VectorType>
+    void AddVertexAttribute(const VertexAttributeBuffer<VectorType> &vertex_buffer)
+    {
+        Bind();
+        vertex_buffer.Bind();
+        glEnableVertexAttribArray(m_vertex_attribute_count);
+        glVertexAttribPointer(m_vertex_attribute_count, static_cast<uint32_t>(VectorType::length()), GL_FLOAT, GL_FALSE, 0, (const void *)0);
+        ++m_vertex_attribute_count;
+    }
     void AddVertexLayout(const VertexAttributeBuffer<T> &vertex_buffer)
     {
         Bind();
@@ -67,6 +76,7 @@ template <typename T> class VertexArray : Buffer
     }
 
   private:
+    uint32_t m_vertex_attribute_count{0};
     uint32_t m_id;
 };
 
