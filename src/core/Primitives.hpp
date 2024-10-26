@@ -14,31 +14,6 @@
 namespace Iris
 {
 
-static inline RenderObject<Vertex> CreateTriangle(const Color &color)
-{
-    std::vector<Vertex> vertices = {
-        {{-0.5f, -0.5f, 1.0f}, color},
-        {{0.0f, 0.5f, 1.0f}, color},
-        {{0.5f, -0.5f, 1.0f}, color},
-    };
-
-    std::vector<uint32_t> indices = {0, 1, 2};
-    auto mesh = std::make_unique<Mesh<Vertex>>(std::move(vertices), std::move(indices));
-    return RenderObject<Vertex>(std::move(mesh));
-}
-
-static inline RenderObject<TextureVertex> CreateQuad()
-{
-    std::vector<TextureVertex> vertices = {{{-0.5f, -0.5f, 0.0f}, FORWARD, {0.0f, 0.0f}},
-                                           {{0.5f, -0.5f, 0.0f}, FORWARD, {1.0f, 0.0f}},
-                                           {{0.5f, 0.5f, 0.0f}, FORWARD, {1.0f, 1.0f}},
-                                           {{-0.5f, 0.5f, 0.0f}, FORWARD, {0.0f, 1.0f}}};
-
-    std::vector<uint32_t> indices = {0, 1, 2, 2, 3, 0};
-    auto mesh = std::make_unique<Mesh<TextureVertex>>(std::move(vertices), std::move(indices));
-    return RenderObject<TextureVertex>(std::move(mesh));
-}
-
 static inline RenderObject<Vertex> CreateCube(const Color &color)
 {
     std::vector<Vertex> vertices = {{{-0.5f, -0.5f, -0.5f}, color}, {{0.5f, -0.5f, -0.5f}, color},
@@ -73,6 +48,33 @@ static inline RenderObject<Vertex> CreateCube(const Color &color)
     auto mesh = std::make_unique<Mesh<Vertex>>(std::move(vertices), std::move(indices));
     return RenderObject<Vertex>(std::move(mesh));
 }
+
+/*
+static inline RenderObject<Vertex> CreateTriangle(const Color &color)
+{
+    std::vector<Vertex> vertices = {
+        {{-0.5f, -0.5f, 1.0f}, color},
+        {{0.0f, 0.5f, 1.0f}, color},
+        {{0.5f, -0.5f, 1.0f}, color},
+    };
+
+    std::vector<uint32_t> indices = {0, 1, 2};
+    auto mesh = std::make_unique<Mesh<Vertex>>(std::move(vertices), std::move(indices));
+    return RenderObject<Vertex>(std::move(mesh));
+}
+
+static inline RenderObject<TextureVertex> CreateQuad()
+{
+    std::vector<TextureVertex> vertices = {{{-0.5f, -0.5f, 0.0f}, FORWARD, {0.0f, 0.0f}},
+                                           {{0.5f, -0.5f, 0.0f}, FORWARD, {1.0f, 0.0f}},
+                                           {{0.5f, 0.5f, 0.0f}, FORWARD, {1.0f, 1.0f}},
+                                           {{-0.5f, 0.5f, 0.0f}, FORWARD, {0.0f, 1.0f}}};
+
+    std::vector<uint32_t> indices = {0, 1, 2, 2, 3, 0};
+    auto mesh = std::make_unique<Mesh<TextureVertex>>(std::move(vertices), std::move(indices));
+    return RenderObject<TextureVertex>(std::move(mesh));
+}
+
 
 static inline RenderObject<Vertex> CreateSphere(const Color &color, size_t latitudes = 20, size_t longitudes = 20,
                                                 float radius = 0.5f)
@@ -241,5 +243,6 @@ static inline RenderObject<Vertex> CreateVoxelMesh(const std::vector<ColoredVoxe
     auto mesh = std::make_unique<Mesh<Vertex>>(std::move(vertices), std::move(indices));
     return RenderObject<Vertex>(std::move(mesh));
 }
+*/
 
 } // namespace Iris
