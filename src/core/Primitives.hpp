@@ -59,6 +59,30 @@ static inline RenderObject CreateCube(const Color &color)
     return RenderObject(std::move(mesh));
 }
 
+static inline RenderObject CreateQuad()
+{
+    std::vector<glm::vec3> positions {
+        {-0.5f, -0.5f, 0.0f},
+        {0.5f, -0.5f, 0.0f},
+        {0.5f, 0.5f, 0.0f},
+        {-0.5f, 0.5f, 0.0f}
+    };
+
+    std::vector<glm::vec3> normals {FORWARD, FORWARD, FORWARD, FORWARD};
+    std::vector<glm::vec2> texture_coordinates {
+        {0.0f, 0.0f},
+        {1.0f, 0.0f},
+        {1.0f, 1.0f},
+        {0.0f, 1.0f}
+
+    };
+    std::vector<glm::vec4> colors;
+
+    std::vector<uint32_t> indices = {0, 1, 2, 2, 3, 0};
+    auto mesh = std::make_unique<Mesh>(std::move(positions), std::move(normals), std::move(texture_coordinates), std::move(colors), std::move(indices));
+    return RenderObject(std::move(mesh));
+}
+
 /*
 static inline RenderObject<Vertex> CreateTriangle(const Color &color)
 {
@@ -73,17 +97,6 @@ static inline RenderObject<Vertex> CreateTriangle(const Color &color)
     return RenderObject(std::move(mesh));
 }
 
-static inline RenderObject<TextureVertex> CreateQuad()
-{
-    std::vector<TextureVertex> vertices = {{{-0.5f, -0.5f, 0.0f}, FORWARD, {0.0f, 0.0f}},
-                                           {{0.5f, -0.5f, 0.0f}, FORWARD, {1.0f, 0.0f}},
-                                           {{0.5f, 0.5f, 0.0f}, FORWARD, {1.0f, 1.0f}},
-                                           {{-0.5f, 0.5f, 0.0f}, FORWARD, {0.0f, 1.0f}}};
-
-    std::vector<uint32_t> indices = {0, 1, 2, 2, 3, 0};
-    auto mesh = std::make_unique<Mesh>(std::move(vertices), std::move(indices));
-    return RenderObject(std::move(mesh));
-}
 
 
 static inline RenderObject CreateSphere(const Color &color, size_t latitudes = 20, size_t longitudes = 20,
