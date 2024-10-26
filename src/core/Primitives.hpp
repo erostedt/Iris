@@ -86,10 +86,10 @@ static inline RenderObject CreateQuad()
 /*
 static inline RenderObject<Vertex> CreateTriangle(const Color &color)
 {
-    std::vector<Vertex> vertices = {
-        {{-0.5f, -0.5f, 1.0f}, color},
-        {{0.0f, 0.5f, 1.0f}, color},
-        {{0.5f, -0.5f, 1.0f}, color},
+    std::vector<glm::vec3> positions = {
+        {-0.5f, -0.5f, 0.0f},
+        {0.0f, 0.5f, 0.0f},
+        {0.5f, -0.5f, 0.0f}
     };
 
     std::vector<uint32_t> indices = {0, 1, 2};
