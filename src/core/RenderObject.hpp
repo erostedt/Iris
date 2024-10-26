@@ -8,7 +8,7 @@
 namespace Iris
 {
 
-template <typename T> class RenderObject
+class RenderObject
 {
   public:
     RenderObject(std::unique_ptr<Mesh> &&mesh, const Transform &transform)

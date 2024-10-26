@@ -48,7 +48,7 @@ static std::vector<VertexIndices> parse_face_indices(const std::string &line)
     return face_indices;
 }
 
-static inline RenderObject<TextureVertex> read_obj_file(const std::filesystem::path &objpath)
+static inline RenderObject read_obj_file(const std::filesystem::path &objpath)
 {
     assert(std::filesystem::exists(objpath));
     std::ifstream file(objpath);
@@ -130,7 +130,7 @@ static inline RenderObject<TextureVertex> read_obj_file(const std::filesystem::p
     }
 
     auto mesh = std::make_unique<Mesh>(std::move(vertices), std::move(indices));
-    return RenderObject<TextureVertex>(std::move(mesh));
+    return RenderObject(std::move(mesh));
 }
 
 }; // namespace Iris

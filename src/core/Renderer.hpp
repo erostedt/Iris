@@ -13,8 +13,7 @@ namespace Iris
 class Renderer
 {
   public:
-    template <typename T>
-    void Render(const ProjectionCamera &camera, const RenderObject<T> &render_object, const uint32_t shader) const
+    void Render(const ProjectionCamera &camera, const RenderObject &render_object, const uint32_t shader) const
     {
         const auto projection_matrix = camera.GetProjectionMatrix();
         const auto view_matrix = camera.GetViewMatrix();

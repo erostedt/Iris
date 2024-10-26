@@ -14,7 +14,7 @@
 namespace Iris
 {
 
-static inline RenderObject<Vertex> CreateCube(const Color &color)
+static inline RenderObject CreateCube(const Color &color)
 {
     std::vector<glm::vec3> positions = {
         {-0.5f, -0.5f, -0.5f},
@@ -56,7 +56,7 @@ static inline RenderObject<Vertex> CreateCube(const Color &color)
                                      6, 7, 3};
 
     auto mesh = std::make_unique<Mesh>(std::move(positions), std::move(normals), std::move(texture_coordinates), std::move(colors), std::move(indices));
-    return RenderObject<Vertex>(std::move(mesh));
+    return RenderObject(std::move(mesh));
 }
 
 /*
@@ -69,8 +69,8 @@ static inline RenderObject<Vertex> CreateTriangle(const Color &color)
     };
 
     std::vector<uint32_t> indices = {0, 1, 2};
-    auto mesh = std::make_unique<Mesh<Vertex>>(std::move(vertices), std::move(indices));
-    return RenderObject<Vertex>(std::move(mesh));
+    auto mesh = std::make_unique<Mesh>(std::move(vertices), std::move(indices));
+    return RenderObject(std::move(mesh));
 }
 
 static inline RenderObject<TextureVertex> CreateQuad()
@@ -81,12 +81,12 @@ static inline RenderObject<TextureVertex> CreateQuad()
                                            {{-0.5f, 0.5f, 0.0f}, FORWARD, {0.0f, 1.0f}}};
 
     std::vector<uint32_t> indices = {0, 1, 2, 2, 3, 0};
-    auto mesh = std::make_unique<Mesh<TextureVertex>>(std::move(vertices), std::move(indices));
-    return RenderObject<TextureVertex>(std::move(mesh));
+    auto mesh = std::make_unique<Mesh>(std::move(vertices), std::move(indices));
+    return RenderObject(std::move(mesh));
 }
 
 
-static inline RenderObject<Vertex> CreateSphere(const Color &color, size_t latitudes = 20, size_t longitudes = 20,
+static inline RenderObject CreateSphere(const Color &color, size_t latitudes = 20, size_t longitudes = 20,
                                                 float radius = 0.5f)
 {
     std::vector<Vertex> vertices;
@@ -124,8 +124,8 @@ static inline RenderObject<Vertex> CreateSphere(const Color &color, size_t latit
             indices.push_back(next_offset + (s + 1));
         }
     }
-    auto mesh = std::make_unique<Mesh<Vertex>>(std::move(vertices), std::move(indices));
-    return RenderObject<Vertex>(std::move(mesh));
+    auto mesh = std::make_unique<Mesh>(std::move(vertices), std::move(indices));
+    return RenderObject(std::move(mesh));
 }
 
 static inline RenderObject<Vertex> CreatePointCloud(const std::vector<ColoredSphere> &colored_spheres,
@@ -194,8 +194,8 @@ static inline RenderObject<Vertex> CreatePointCloud(const std::vector<ColoredSph
         offset += (latitudes + 1) * (longitudes + 1);
     }
 
-    auto mesh = std::make_unique<Mesh<Vertex>>(std::move(vertices), std::move(indices));
-    return RenderObject<Vertex>(std::move(mesh));
+    auto mesh = std::make_unique<Mesh>(std::move(vertices), std::move(indices));
+    return RenderObject(std::move(mesh));
 }
 
 static inline RenderObject<Vertex> CreateVoxelMesh(const std::vector<ColoredVoxel> &colored_voxels)
@@ -250,8 +250,8 @@ static inline RenderObject<Vertex> CreateVoxelMesh(const std::vector<ColoredVoxe
         }
         offset += VOXEL_CORNERS;
     }
-    auto mesh = std::make_unique<Mesh<Vertex>>(std::move(vertices), std::move(indices));
-    return RenderObject<Vertex>(std::move(mesh));
+    auto mesh = std::make_unique<Mesh>(std::move(vertices), std::move(indices));
+    return RenderObject(std::move(mesh));
 }
 */
 
