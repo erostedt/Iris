@@ -1,5 +1,4 @@
 #pragma once
-#include <array>
 #include <glm/glm.hpp>
 #include <memory>
 #include <vector>
@@ -14,48 +13,121 @@
 namespace Iris
 {
 
-static inline RenderObject CreateCube(const Color &color)
+static inline RenderObject CreateCube()
 {
-    std::vector<glm::vec3> positions = {
+    std::vector<glm::vec3> positions{
         {-0.5f, -0.5f, -0.5f},
-        {0.5f, -0.5f, -0.5f},
-        {0.5f, 0.5f, -0.5f},
-        {-0.5f, 0.5f, -0.5f},
-        {-0.5f, -0.5f, 0.5f},
-        {0.5f, -0.5f, 0.5f},
-        {0.5f, 0.5f, 0.5f},
-        {-0.5f, 0.5f, 0.5f}
+        { 0.5f, -0.5f, -0.5f},
+        { 0.5f,  0.5f, -0.5f},
+        {-0.5f,  0.5f, -0.5f},
+
+        {-0.5f, -0.5f,  0.5f},
+        { 0.5f, -0.5f,  0.5f},
+        { 0.5f,  0.5f,  0.5f},
+        {-0.5f,  0.5f,  0.5f},
+
+        {-0.5f, -0.5f, -0.5f},
+        {-0.5f, -0.5f,  0.5f},
+        {-0.5f,  0.5f,  0.5f},
+        {-0.5f,  0.5f, -0.5f},
+
+        { 0.5f, -0.5f, -0.5f},
+        { 0.5f, -0.5f,  0.5f},
+        { 0.5f,  0.5f,  0.5f},
+        { 0.5f,  0.5f, -0.5f},
+
+        {-0.5f, -0.5f,  0.5f},
+        { 0.5f, -0.5f,  0.5f},
+        { 0.5f, -0.5f, -0.5f},
+        {-0.5f, -0.5f, -0.5f},
+
+        {-0.5f,  0.5f, -0.5f},
+        { 0.5f,  0.5f, -0.5f},
+        { 0.5f,  0.5f,  0.5f},
+        {-0.5f,  0.5f,  0.5f},
     };
 
-    std::vector<glm::vec3> normals;
-    std::vector<glm::vec2> texture_coordinates;
-    std::vector<glm::vec4> colors = {color, color, color, color, color, color, color, color};
+    std::vector<glm::vec3> normals
+    {
+        FORWARD,
+        FORWARD,
+        FORWARD,
+        FORWARD,
 
-    std::vector<uint32_t> indices = {0, 1, 2,
+        BACKWARD,
+        BACKWARD,
+        BACKWARD,
+        BACKWARD,
 
-                                     2, 3, 0,
+        LEFT,
+        LEFT,
+        LEFT,
+        LEFT,
 
-                                     4, 5, 6,
+        RIGHT,
+        RIGHT,
+        RIGHT,
+        RIGHT,
 
-                                     6, 7, 4,
+        DOWN,
+        DOWN,
+        DOWN,
+        DOWN,
 
-                                     0, 4, 7,
+        UP,
+        UP,
+        UP,
+        UP,
+    };
+    std::vector<glm::vec2> texture_coordinates
+    {
+        {0.0f, 0.0f},
+        {1.0f, 0.0f},
+        {1.0f, 1.0f},
+        {0.0f, 1.0f},
 
-                                     7, 3, 0,
+        {0.0f, 0.0f},
+        {1.0f, 0.0f},
+        {1.0f, 1.0f},
+        {0.0f, 1.0f},
 
-                                     1, 5, 6,
+        {0.0f, 0.0f},
+        {1.0f, 0.0f},
+        {1.0f, 1.0f},
+        {0.0f, 1.0f},
 
-                                     6, 2, 1,
+        {0.0f, 0.0f},
+        {1.0f, 0.0f},
+        {1.0f, 1.0f},
+        {0.0f, 1.0f},
 
-                                     0, 1, 5,
+        {0.0f, 0.0f},
+        {1.0f, 0.0f},
+        {1.0f, 1.0f},
+        {0.0f, 1.0f},
 
-                                     5, 4, 0,
+        {0.0f, 0.0f},
+        {1.0f, 0.0f},
+        {1.0f, 1.0f},
+        {0.0f, 1.0f},
+    };
 
-                                     3, 2, 6,
+    std::vector<uint32_t> indices = {
+    // Front face
+    0, 1, 2, 0, 2, 3,
+    // Back face
+    4, 5, 6, 4, 6, 7,
+    // Left face
+    8, 9, 10, 8, 10, 11,
+    // Right face
+    12, 13, 14, 12, 14, 15,
+    // Bottom face
+    16, 17, 18, 16, 18, 19,
+    // Top face
+    20, 21, 22, 20, 22, 23
+};
 
-                                     6, 7, 3};
-
-    auto mesh = std::make_unique<Mesh>(std::move(positions), std::move(normals), std::move(texture_coordinates), std::move(colors), std::move(indices));
+    auto mesh = std::make_unique<Mesh>(std::move(positions), std::move(normals), std::move(texture_coordinates), std::move(indices));
     return RenderObject(std::move(mesh));
 }
 
@@ -79,11 +151,11 @@ static inline RenderObject CreateQuad()
     std::vector<glm::vec4> colors;
 
     std::vector<uint32_t> indices = {0, 1, 2, 2, 3, 0};
-    auto mesh = std::make_unique<Mesh>(std::move(positions), std::move(normals), std::move(texture_coordinates), std::move(colors), std::move(indices));
+    auto mesh = std::make_unique<Mesh>(std::move(positions), std::move(normals), std::move(texture_coordinates), std::move(indices));
     return RenderObject(std::move(mesh));
 }
 
-static inline RenderObject CreateTriangle(const Color &color)
+static inline RenderObject CreateTriangle()
 {
     std::vector<glm::vec3> positions = {
         {-0.5f, -0.5f, 0.0f},
@@ -98,10 +170,9 @@ static inline RenderObject CreateTriangle(const Color &color)
         {0.5f, 1.0f},
         {1.0f, 0.0f}
     };
-    std::vector<glm::vec4> colors {color, color, color};
 
     std::vector<uint32_t> indices = {0, 1, 2};
-    auto mesh = std::make_unique<Mesh>(std::move(positions), std::move(normals), std::move(texture_coordinates), std::move(colors), std::move(indices));
+    auto mesh = std::make_unique<Mesh>(std::move(positions), std::move(normals), std::move(texture_coordinates), std::move(indices));
     return RenderObject(std::move(mesh));
 }
 

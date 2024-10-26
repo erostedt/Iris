@@ -9,6 +9,7 @@
 #include "Primitives.hpp"
 #include "RenderObject.hpp"
 #include "Renderer.hpp"
+#include "Texture.hpp"
 #include "Shader.hpp"
 #include "Transform.hpp"
 #include "Window.hpp"
@@ -29,7 +30,9 @@ int main()
         return EXIT_FAILURE;
     }
 
-    auto cube = CreateCube(RED);
+    auto cube = CreateCube();
+    Texture texture = Texture::ColorTexture(GREEN);
+    texture.Bind();
 
     const fs::path shaders_path = "../examples/cube/shaders";
     const uint32_t shader = create_shader(shaders_path / "vertex.vert", shaders_path / "fragment.frag");

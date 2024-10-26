@@ -23,7 +23,7 @@ int main()
         return EXIT_FAILURE;
     }
 
-    auto triangle = CreateTriangle(RED);
+    auto triangle = CreateTriangle();
     Texture texture = Texture::ColorTexture(GREEN);
     texture.Bind();
     const fs::path shaders_path = "../examples/triangle/shaders";
