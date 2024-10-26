@@ -21,7 +21,7 @@ class Renderer
         const auto model_matrix = render_object.GetModelMatrix();
 
         render_object.Bind();
-        const Mesh<T> &mesh = render_object.GetMesh();
+        const Mesh &mesh = render_object.GetMesh();
 
         GL_CHECK(glUseProgram(shader));
 

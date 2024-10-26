@@ -55,7 +55,7 @@ static inline RenderObject<Vertex> CreateCube(const Color &color)
 
                                      6, 7, 3};
 
-    auto mesh = std::make_unique<Mesh<Vertex>>(std::move(positions), std::move(normals), std::move(texture_coordinates), std::move(colors), std::move(indices));
+    auto mesh = std::make_unique<Mesh>(std::move(positions), std::move(normals), std::move(texture_coordinates), std::move(colors), std::move(indices));
     return RenderObject<Vertex>(std::move(mesh));
 }
 

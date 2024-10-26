@@ -7,7 +7,7 @@
 namespace Iris
 {
 
-template <typename T> class Mesh
+class Mesh
 {
   public:
     Mesh(std::vector<glm::vec3> &&positions, std::vector<glm::vec3> &&normals, std::vector<glm::vec2> &&texture_coordinates, std::vector<glm::vec4> &&colors, std::vector<uint32_t> &&indices)

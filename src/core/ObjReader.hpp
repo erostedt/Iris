@@ -129,7 +129,7 @@ static inline RenderObject<TextureVertex> read_obj_file(const std::filesystem::p
         }
     }
 
-    auto mesh = std::make_unique<Mesh<TextureVertex>>(std::move(vertices), std::move(indices));
+    auto mesh = std::make_unique<Mesh>(std::move(vertices), std::move(indices));
     return RenderObject<TextureVertex>(std::move(mesh));
 }
 

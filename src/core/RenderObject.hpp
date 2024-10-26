@@ -11,11 +11,11 @@ namespace Iris
 template <typename T> class RenderObject
 {
   public:
-    RenderObject(std::unique_ptr<Mesh<T>> &&mesh, const Transform &transform)
+    RenderObject(std::unique_ptr<Mesh> &&mesh, const Transform &transform)
         : m_mesh(std::move(mesh)), m_transform(transform)
     {
     }
-    RenderObject(std::unique_ptr<Mesh<T>> &&mesh) : m_mesh(std::move(mesh))
+    RenderObject(std::unique_ptr<Mesh> &&mesh) : m_mesh(std::move(mesh))
     {
     }
     const glm::mat4 &GetModelMatrix() const
@@ -23,7 +23,7 @@ template <typename T> class RenderObject
         return m_transform.GetModelMatrix();
     }
 
-    const Mesh<T> &GetMesh() const
+    const Mesh &GetMesh() const
     {
         return *m_mesh;
     }
@@ -40,7 +40,7 @@ template <typename T> class RenderObject
     }
 
   protected:
-    std::unique_ptr<Mesh<T>> m_mesh;
+    std::unique_ptr<Mesh> m_mesh;
     Transform m_transform = Transform::Identity();
     // Mateiral
 };
