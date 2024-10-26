@@ -50,9 +50,4 @@ namespace Iris
         return m_indices.size();
     }
 
-    const std::vector<uint32_t> &FixedIndexBuffer::GetIndices() const
-    {
-        return m_indices;
-    }
-
 }; // namespace Iris

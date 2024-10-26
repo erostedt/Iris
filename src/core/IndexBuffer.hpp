@@ -23,7 +23,6 @@ class FixedIndexBuffer : Buffer
     void Bind() const override;
     void Unbind() const override;
     size_t Size() const;
-    const std::vector<uint32_t> &GetIndices() const;
 
   private:
     std::vector<uint32_t> m_indices;
