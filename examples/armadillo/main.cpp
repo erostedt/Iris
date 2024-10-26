@@ -13,6 +13,7 @@
 #include "Renderer.hpp"
 #include "Shader.hpp"
 #include "Shapes.hpp"
+#include "Texture.hpp"
 #include "Window.hpp"
 
 const size_t WINDOW_WIDTH = 1280;
@@ -67,18 +68,10 @@ int main()
     const fs::path shaders_path = "../examples/armadillo/shaders";
     uint32_t shader = CreateShader(shaders_path / "vertex.vert", shaders_path / "fragment.frag");
 
-    BoundingBox bounds = bounding_box(*points).padded(1.0001f, 1.0001f, 1.0001f);
+    auto point_cloud = CreatePointCloud(*points, 0.05f, 5, 10);
 
-    std::vector<ColoredSphere> spheres;
-    spheres.reserve(points->size());
-    for (const auto &point : *points)
-    {
-        glm::vec3 normalized_pos = (point - bounds.min) / bounds.dimensions();
-        glm::vec3 shifted = point;
-        spheres.push_back({{shifted, 0.05f}, {normalized_pos, 1.0f}});
-    }
-    auto point_cloud = CreatePointCloud(spheres, 5, 10);
-
+    Texture texture = Texture::ColorTexture(GREEN);
+    texture.Bind();
     float xrot = 0.0f;
     float yrot = glm::pi<float>();
     float zrot = 0.0f;
