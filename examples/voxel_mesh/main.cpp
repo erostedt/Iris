@@ -2,11 +2,12 @@
 #include <cstddef>
 #include <glm/glm.hpp>
 
+#include "Texture.hpp"
 #include "imgui.h"
 #include <cassert>
-#include <filesystem>
 #include <cstdint>
 #include <cstdlib>
+#include <filesystem>
 #include <stdio.h>
 
 #include <iostream>
@@ -25,9 +26,9 @@ const size_t WINDOW_HEIGHT = 720;
 using namespace Iris;
 namespace fs = std::filesystem;
 
-std::vector<ColoredVoxel> CreateColoredVoxel()
+std::vector<glm::vec3> CreateVoxels()
 {
-    std::vector<ColoredVoxel> voxels;
+    std::vector<glm::vec3> voxels;
     const size_t xcount = 10;
     const size_t ycount = 10;
     const size_t zcount = 10;
@@ -48,22 +49,18 @@ std::vector<ColoredVoxel> CreateColoredVoxel()
     const float dy = ywidth / ycount;
     const float dz = zwidth / zcount;
 
-    for (size_t ix{0}; ix < xcount; ++ix)
+    for (size_t ix = 0; ix < xcount; ++ix)
     {
         float x = xmin + (ix + 0.5f) * dx;
-        float r = (x - xmin) / xwidth;
-
-        for (size_t iy{0}; iy < xcount; ++iy)
+        for (size_t iy = 0; iy < ycount; ++iy)
         {
             float y = ymin + (iy + 0.5f) * dy;
-            float g = (y - ymin) / ywidth;
-            for (size_t iz{0}; iz < xcount; ++iz)
+            for (size_t iz = 0; iz < zcount; ++iz)
             {
                 float z = zmin + (iz + 0.5f) * dz;
-                float b = (z - zmin) / zwidth;
                 if (Random::Uniform(0.0f, 1.0f) < 0.5f)
                 {
-                    voxels.push_back(ColoredVoxel{Voxel{{x, y, z}, {dx, dy, dz}}, {r, g, b, 1.0}});
+                    voxels.push_back({x, y, z});
                 }
             }
         }
@@ -81,8 +78,9 @@ int main()
         return EXIT_FAILURE;
     }
 
-    const auto voxels = CreateColoredVoxel();
-    auto voxel_mesh = CreateVoxelMesh(voxels);
+    window->SetBackgroundColor(WHITE);
+    const auto voxels = CreateVoxels();
+    auto voxel_mesh = CreateVoxelMesh(voxels, 0.09, 0.09, 0.09);
 
     const fs::path shaders_path = "../examples/voxel_mesh/shaders";
     const uint32_t shader = CreateShader(shaders_path / "vertex.vert", shaders_path / "fragment.frag");
@@ -96,6 +94,9 @@ int main()
     const Renderer renderer;
     ProjectionCamera camera(45.0f, WINDOW_WIDTH, WINDOW_HEIGHT, 0.1f, 100.0f);
     camera.MoveTo({0.0f, 0.0f, 5.0f});
+
+    Texture gengar = Texture::FromFile("../gengar.png");
+    gengar.Bind();
 
     while (window->Show())
     {
