@@ -80,7 +80,7 @@ int main()
 
     window->SetBackgroundColor(WHITE);
     const auto voxels = CreateVoxels();
-    auto voxel_mesh = CreateVoxelMesh(voxels, 0.09, 0.09, 0.09);
+    auto voxel_mesh = CreateVoxelMesh(voxels, 0.099, 0.099, 0.099);
 
     const fs::path shaders_path = "../examples/voxel_mesh/shaders";
     const uint32_t shader = CreateShader(shaders_path / "vertex.vert", shaders_path / "fragment.frag");

@@ -28,12 +28,12 @@ int main()
     const fs::path example_path  = "../examples/rubber_duck";
 
     Texture texture = Texture::FromFile(example_path / "bob/bob_diffuse.png");
-    auto model = read_obj_file(example_path / "bob/bob_tri.obj");
+    texture.Bind();
+    auto model = ReadObjFile(example_path / "bob/bob_tri.obj");
 
     const fs::path shaders_path = example_path / "shaders";
-    const uint32_t shader = create_shader(shaders_path / "vertex.vert", shaders_path / "fragment.frag");
+    const uint32_t shader = CreateShader(shaders_path / "vertex.vert", shaders_path / "fragment.frag");
 
-    texture.Bind();
     const Renderer renderer;
     ProjectionCamera camera(45.0f, WINDOW_WIDTH, WINDOW_HEIGHT, 0.1f, 100.0f);
     camera.MoveTo({0.0f, 0.0f, 5.0f});

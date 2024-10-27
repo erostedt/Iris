@@ -1,7 +1,6 @@
 #pragma once
 
 #include "OpenGL.hpp"
-#include <algorithm>
 #define STB_IMAGE_IMPLEMENTATION
 #include "stb_image.h"
 
@@ -49,10 +48,9 @@ class Texture
         stbi_set_flip_vertically_on_load(1);
         uint8_t *data = stbi_load(filepath.c_str(), &width, &height, &channels, STBI_rgb_alpha);
 
-        size_t byte_count = width * height * channels;
+        size_t byte_count = width * height * STBI_rgb_alpha;
         Texture texture;
-        texture.m_data.reserve(byte_count);
-        std::copy(data, data + byte_count, texture.m_data.begin());
+        texture.m_data.assign(data, data + byte_count);
         texture.m_width = width;
         texture.m_height = height;
         texture.m_channels = channels;

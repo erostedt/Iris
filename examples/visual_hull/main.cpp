@@ -17,6 +17,7 @@
 #include "Renderer.hpp"
 #include "Shader.hpp"
 #include "Shapes.hpp"
+#include "Texture.hpp"
 #include "Transform.hpp"
 #include "Window.hpp"
 
@@ -221,18 +222,14 @@ void Centrize(std::vector<Voxel> &voxels, const std::vector<float> &bounds)
     }
 }
 
-std::vector<ColoredVoxel> ColorizeVoxels(const std::vector<Voxel> &voxels, const std::vector<float> &bounds)
+std::vector<glm::vec3> GetVoxelCenters(const std::vector<Voxel> &voxels)
 {
-    std::vector<ColoredVoxel> cvoxels;
+    std::vector<glm::vec3> centers;
     for (const Voxel &voxel : voxels)
     {
-        float r = (voxel.center.x - bounds[0]) / (bounds[1] - bounds[0]);
-        float g = (voxel.center.y - bounds[2]) / (bounds[3] - bounds[2]);
-        float b = (voxel.center.z - bounds[4]) / (bounds[5] - bounds[4]);
-
-        cvoxels.push_back({voxel, {r, g, b, 1.0}});
+        centers.push_back(voxel.center);
     }
-    return cvoxels;
+    return centers;
 }
 
 int main()
@@ -279,7 +276,10 @@ int main()
     std::vector<float> bounds = Bounds(voxels);
     Centrize(voxels, bounds);
 
-    auto voxel_mesh = CreateVoxelMesh(ColorizeVoxels(visual_hull, bounds));
+    float dx = std::abs(xend - xstart)/xsteps;
+    float dy = std::abs(yend - ystart)/ysteps;
+    float dz = std::abs(zend - zstart)/zsteps;
+    auto voxel_mesh = CreateVoxelMesh(GetVoxelCenters(visual_hull), dx, dy, dz);
 
     if (!window)
     {
@@ -289,6 +289,8 @@ int main()
 
     const fs::path shaders_path = "../examples/visual_hull/shaders";
     const uint32_t shader = CreateShader(shaders_path / "vertex.vert", shaders_path / "fragment.frag");
+    Texture texture = Texture::ColorTexture(BLUE);
+    texture.Bind();
 
     float xrot = 0.0f;
     float yrot = 0.0f;

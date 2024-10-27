@@ -10,6 +10,7 @@
 #include "Camera.hpp"
 #include "Renderer.hpp"
 #include "Rotation.hpp"
+#include "Texture.hpp"
 #include "imgui.h"
 #include <cassert>
 #include <cstdint>
@@ -29,21 +30,6 @@ const size_t WINDOW_HEIGHT = 720;
 using namespace Iris;
 namespace fs = std::filesystem;
 
-std::vector<ColoredSphere> CreateSpheres()
-{
-    return {
-
-        {Sphere{{-1.0f, -1.0f, -1.0f}, 0.5f}, {1.0f, 0.0f, 0.0f, 1.0f}},
-        {Sphere{{-1.0f, -1.0f, 1.0f}, 0.5f}, {0.0f, 1.0f, 0.0f, 1.0f}},
-        {Sphere{{-1.0f, 1.0f, -1.0f}, 0.5f}, {0.0f, 0.0f, 1.0f, 1.0f}},
-        {Sphere{{-1.0f, 1.0f, 1.0f}, 0.5f}, {1.0f, 0.0f, 0.0f, 1.0f}},
-        {Sphere{{1.0f, -1.0f, -1.0f}, 0.5f}, {0.0f, 1.0f, 0.0f, 1.0f}},
-        {Sphere{{1.0f, -1.0f, 1.0f}, 0.5f}, {0.0f, 0.0f, 1.0f, 1.0f}},
-        {Sphere{{1.0f, 1.0f, -1.0f}, 0.5f}, {1.0f, 0.0f, 0.0f, 1.0f}},
-        {Sphere{{1.0f, 1.0f, 1.0f}, 0.5f}, {0.0f, 1.0f, 0.0f, 1.0f}}
-
-    };
-}
 
 int main()
 {
@@ -55,11 +41,22 @@ int main()
         return EXIT_FAILURE;
     }
 
-    const auto spheres = CreateSpheres();
-    auto point_cloud = CreatePointCloud(spheres);
+    std::vector<glm::vec3> positions {
+        {-1.0f, -1.0f, -1.0f},
+        {-1.0f, -1.0f, 1.0f},
+        {-1.0f, 1.0f, -1.0f},
+        {-1.0f, 1.0f, 1.0f},
+        {1.0f, -1.0f, -1.0f},
+        {1.0f, -1.0f, 1.0f},
+        {1.0f, 1.0f, -1.0f},
+        {1.0f, 1.0f, 1.0f}
+    };
+    auto point_cloud = CreatePointCloud(positions, 0.5f);
 
     const fs::path shaders_path = "../examples/small_point_cloud/shaders";
     const uint32_t shader = CreateShader(shaders_path / "vertex.vert", shaders_path / "fragment.frag");
+    Texture texture = Texture::ColorTexture(GREEN);
+    texture.Bind();
 
     float xrot = 0.0f;
     float yrot = 0.0f;
